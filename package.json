@@ -1,7 +1,7 @@
 {
   "name": "postcss-remove-duplicate-values",
   "private": true,
-  "version": "2.0.0-rc.1",
+  "version": "2.0.0",
   "description": "🚀 PostCSS plugin that intelligently removes duplicate CSS properties, reduces bundle size, and improves CSS maintainability. Handles !important declarations, vendor prefixes, and selector filtering with zero configuration.",
   "main": "./src/index.js",
   "types": "./src/index.d.ts",
