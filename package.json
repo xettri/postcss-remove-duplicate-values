@@ -24,7 +24,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xettri/postcss-remove-duplicate-values.git"
+    "url": "https://github.com/xettri/postcss-remove-duplicate-values.git"
   },
   "author": {
     "name": "Bharat Rawat",
