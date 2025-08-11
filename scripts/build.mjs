@@ -47,6 +47,7 @@ function createPackageJson(){
   const data = {...pkg}
   delete data.scripts
   delete data.private;
+  delete data.devDependencies;
 
   const packageJson = {
     ...data,
