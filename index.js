@@ -23,10 +23,12 @@ const PLUGIN_NAME = "postcss-remove-duplicate-values";
  */
 
 /**
- * function to check is walkSelector is valid selector as per config passed
- * @param {Options['selector']} selector
- * @param {string} walkSelector
- * @returns {boolean}
+ * Determines if a CSS selector should be processed based on the provided selector filter.
+ * This allows targeting specific selectors for duplicate value removal.
+ *
+ * @param {Options['selector']} selector - The selector filter (string, regex, or function)
+ * @param {string} walkSelector - The CSS selector to check
+ * @returns {boolean} - True if the selector should be processed
  */
 const matchSelector = (selector, walkSelector) => {
   if (typeof selector === "string") {
@@ -40,23 +42,27 @@ const matchSelector = (selector, walkSelector) => {
 };
 
 /**
- * function to check is value is valid fallback value
- * @param {string} value
- * @returns {boolean}
+ * Identifies vendor-prefixed CSS properties that should be treated as fallbacks.
+ * Vendor prefixes are preserved alongside standard properties to maintain browser compatibility.
+ *
+ * @param {string} property - The CSS property name to check
+ * @returns {boolean} - True if the property is vendor-prefixed
  */
-const isValidFallbackValue = (value) => {
+const isValidFallbackValue = (property) => {
   return (
-    value.indexOf("-webkit-") !== -1 ||
-    value.indexOf("-moz-") !== -1 ||
-    value.indexOf("-ms-") !== -1 ||
-    value.indexOf("-o-") !== -1
+    property.startsWith("-webkit-") ||
+    property.startsWith("-moz-") ||
+    property.startsWith("-ms-") ||
+    property.startsWith("-o-")
   );
 };
 
 /**
- * function to check is node is empty or not
- * @param {import('postcss').Rule} rule
- * @returns {boolean}
+ * Determines if a CSS rule is empty (contains no properties or only comments).
+ * Empty rules can be optionally removed to clean up the stylesheet.
+ *
+ * @param {import('postcss').Rule} rule - The CSS rule to check
+ * @returns {boolean} - True if the rule is empty
  */
 const isEmpty = (rule) => {
   return (
@@ -66,110 +72,125 @@ const isEmpty = (rule) => {
 };
 
 /**
- * PostCSS plugin to remove duplicate values from CSS selectors.
+ * PostCSS plugin that removes duplicate CSS property values within rules.
+ *
  * @type {import('postcss').PluginCreator<Options>}
- * @param {Options} options
- * @return {import('postcss').Plugin}
+ * @param {Options} options - Plugin configuration options
+ * @return {import('postcss').Plugin} - PostCSS plugin instance
  */
 const plugin = (options = {}) => {
   const { selector, preserveEmpty = false } = options;
+
   return {
     postcssPlugin: PLUGIN_NAME,
-    prepare({ root }) {
-      root.walkRules((rule) => {
-        // if selector is passed and its fail to match with rule selector
-        // then this plugin opration will not applied
-        if (selector) {
-          if (!matchSelector(selector, rule.selector)) {
-            return;
-          }
-        }
-
-        if (isEmpty(rule)) {
-          // it will remove empty selector if preserveEmpty is not true
-          if (preserveEmpty !== true) {
-            rule.remove();
-          }
-        } else {
-          /**
-           * @type {RuleDeclarationsMap}
-           */
-          const ruleDeclarations = new Map();
-
-          /**
-           * @type {RuleDeclarationsMap}
-           */
-          const fallbackRuleDeclarations = new Map();
-
-          rule.walkDecls((declaration) => {
-            const key = declaration.prop;
-            const value = declaration.value.trim();
-            const important = Boolean(declaration.important);
-            const isValidFallback = isValidFallbackValue(value);
-
-            let currentRemoved = false;
-            if (isValidFallback) {
-              const fallbackRuleObject = fallbackRuleDeclarations.get(
-                `${key}:${value}`
-              );
-              if (fallbackRuleObject) {
-                if (fallbackRuleObject.important) {
-                  if (important) {
-                    fallbackRuleObject.remove();
-                  } else {
-                    declaration.remove();
-                    currentRemoved = true;
-                  }
-                } else {
-                  fallbackRuleObject.remove();
-                }
-              }
-            } else if (ruleDeclarations.has(key)) {
-              const data = ruleDeclarations.get(key);
-              if (data.important) {
-                // if current value is important then it will overwrite previous style
-                if (important) {
-                  data.remove();
-                } else {
-                  // if current value is not important older style will overwrite
-                  declaration.remove();
-                  currentRemoved = true;
-                }
-              } else {
-                data.remove();
+    Once(root) {
+      try {
+        root.walkRules((rule) => {
+          try {
+            // Apply selector filtering if specified - only process matching rules
+            if (selector) {
+              if (!matchSelector(selector, rule.selector)) {
+                return;
               }
             }
 
-            // if current node is removed then no need to update map
-            if (currentRemoved) return;
-
-            if (isValidFallback) {
-              const k = `${key}:${value}`;
-              fallbackRuleDeclarations.set(k, {
-                important,
-                remove: () => {
-                  declaration.remove();
-                  // delete entry from map as well
-                  fallbackRuleDeclarations.delete(k);
-                },
-              });
+            if (isEmpty(rule)) {
+              // Remove empty rules unless explicitly preserved
+              if (preserveEmpty !== true) {
+                rule.remove();
+              }
             } else {
-              ruleDeclarations.set(key, {
-                value,
-                important,
-                remove: () => {
-                  declaration.remove();
-                  // delete entry from map as well
-                  ruleDeclarations.delete(key);
-                },
-              });
-            }
-          });
+              // Track regular properties and vendor-prefixed properties separately
+              const ruleDeclarations = new Map();
+              const fallbackRuleDeclarations = new Map();
 
-          ruleDeclarations.clear();
-          fallbackRuleDeclarations.clear();
-        }
-      });
+              rule.walkDecls((declaration) => {
+                try {
+                  // Validate declaration before processing
+                  if (!declaration || !declaration.prop || !declaration.value) {
+                    return; // Skip invalid declarations silently
+                  }
+
+                  const key = declaration.prop;
+                  const value = declaration.value.trim();
+                  const important = Boolean(declaration.important);
+                  const isValidFallback = isValidFallbackValue(key);
+
+                  let currentRemoved = false;
+
+                  if (isValidFallback) {
+                    // Handle vendor-prefixed properties as fallbacks
+                    // These are preserved alongside standard properties for browser compatibility
+                    const existingFallback = fallbackRuleDeclarations.get(key);
+                    if (existingFallback) {
+                      if (existingFallback.important) {
+                        if (important) {
+                          // Both are important - remove the old one (last wins)
+                          existingFallback.declaration.remove();
+                        } else {
+                          // Current is not important - remove it
+                          declaration.remove();
+                          currentRemoved = true;
+                        }
+                      } else {
+                        // Old one is not important - remove it
+                        existingFallback.declaration.remove();
+                      }
+                    }
+                  } else if (ruleDeclarations.has(key)) {
+                    // Handle duplicate standard properties
+                    const data = ruleDeclarations.get(key);
+                    if (data.important) {
+                      if (important) {
+                        // Both are important - remove the old one (last wins)
+                        data.declaration.remove();
+                      } else {
+                        // Current is not important - remove it (important wins)
+                        declaration.remove();
+                        currentRemoved = true;
+                      }
+                    } else {
+                      // Remove the old declaration (last wins)
+                      data.declaration.remove();
+                    }
+                  }
+
+                  // Skip map updates if current declaration was removed
+                  if (currentRemoved) return;
+
+                  // Store the current declaration for future duplicate detection
+                  if (isValidFallback) {
+                    fallbackRuleDeclarations.set(key, {
+                      important,
+                      declaration,
+                    });
+                  } else {
+                    ruleDeclarations.set(key, {
+                      value,
+                      important,
+                      declaration,
+                    });
+                  }
+                } catch (declarationError) {
+                  // Continue processing other declarations silently
+                  // In production, we don't want to spam logs
+                }
+              });
+
+              // Clean up maps to prevent memory leaks
+              ruleDeclarations.clear();
+              fallbackRuleDeclarations.clear();
+            }
+          } catch (ruleError) {
+            // Continue processing other rules silently
+            // In production, we don't want to spam logs
+          }
+        });
+      } catch (rootError) {
+        // Only log critical errors that prevent the plugin from working
+        console.error(`[${PLUGIN_NAME}] Critical error:`, rootError);
+        throw rootError; // Re-throw critical errors
+      }
     },
   };
 };
