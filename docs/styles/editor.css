@@ -1,0 +1,13 @@
+.code-editor {
+  font-family: monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  background: 0;
+  border: none !important;
+  outline: none !important;
+}
+
+.code-editor:focus {
+  border: none !important;
+  outline: none !important;
+}
