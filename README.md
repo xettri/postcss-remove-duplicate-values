@@ -1,11 +1,13 @@
 # [postcss][git_url]-remove-duplicate-values
 
-[![npm version](https://img.shields.io/npm/v/postcss-remove-duplicate-values.svg)][npm_url]
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+<p>
+  <a href="https://npmjs.com/package/postcss-remove-duplicate-values?activeTab=readme"><img src="https://img.shields.io/npm/v/postcss-remove-duplicate-values?style=flat-square&colorA=000000&colorB=8338EC" alt="npm version" /></a>
+  <a href="https://github.com/xettri/postcss-remove-duplicate-values/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square&colorA=000000&colorB=8338EC" alt="license" /></a>
+</p>
 
 > **Smart PostCSS plugin that removes duplicate CSS properties, reduces bundle size, and improves CSS maintainability.**
 
-## ✨ What It Does
+## ✨ What It Does?
 
 Automatically removes duplicate CSS properties from your stylesheets while keeping the most important ones. Perfect for cleaning up CSS and improving performance.
 
