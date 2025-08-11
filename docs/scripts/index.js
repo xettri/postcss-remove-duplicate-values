@@ -1,7 +1,3 @@
-// ============================================================================
-// PostCSS Remove Duplicate Values - Interactive Playground
-// ============================================================================
-
 // Configuration
 const CONFIG = {
   ANIMATION_DURATION: 4000,
@@ -123,10 +119,6 @@ const EXAMPLES = {
 }`,
   },
 };
-
-// ============================================================================
-// Core Functions
-// ============================================================================
 
 /**
  * Load a CSS example into the input editor
@@ -327,10 +319,6 @@ function countDeclarations(css) {
   return css.split(CONFIG.DECLARATION_SEPARATOR).filter(d => d.trim()).length;
 }
 
-// ============================================================================
-// UI Functions
-// ============================================================================
-
 /**
  * Clear output editor and reset statistics
  */
@@ -520,10 +508,6 @@ function getSnackbarActionColor(type) {
   return colors[type] || colors.info;
 }
 
-// ============================================================================
-// Initialization
-// ============================================================================
-
 /**
  * Initialize DOM element cache
  */
@@ -594,10 +578,6 @@ function initialize() {
     loadExample('basic');
   }, 100);
 }
-
-// ============================================================================
-// Event Listeners
-// ============================================================================
 
 // Initialize when DOM is ready
 window.addEventListener('DOMContentLoaded', initialize);

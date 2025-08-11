@@ -3,124 +3,101 @@
 [![npm version](https://img.shields.io/npm/v/postcss-remove-duplicate-values.svg)][npm_url]
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-[PostCSS Remove Duplicate Values] is a plugin for [PostCSS] that removes duplicate CSS property values within rules, optimizing stylesheet size and improving maintainability.
+> **Smart PostCSS plugin that removes duplicate CSS properties, reduces bundle size, and improves CSS maintainability.**
 
-## Installation
+## ✨ What It Does
 
-You can install the plugin via npm, pnpm, or yarn:
+Automatically removes duplicate CSS properties from your stylesheets while keeping the most important ones. Perfect for cleaning up CSS and improving performance.
 
+### 🎯 Key Features
+- **🧹 Removes duplicate properties** (keeps the last one)
+- **⚡ Handles `!important` declarations** intelligently
+- **🎨 Supports vendor prefixes** and modern CSS
+- **🎯 Filters specific selectors** (optional)
+- **🗑️ Cleans empty rules** (configurable)
+- **🚀 Zero configuration** needed
+
+## 🚀 Quick Start
+
+### 1. Install
 ```bash
 npm install postcss-remove-duplicate-values --save-dev
+# or
 pnpm add postcss-remove-duplicate-values -D
+# or
 yarn add postcss-remove-duplicate-values -D
 ```
 
-## What does it do?
-
-This plugin identifies and removes duplicate CSS property values within rules, considering specificity and preserving `!important` declarations. When you have multiple declarations with the same property within a single rule, it retains only the last declaration, prioritizing `!important` values over non-`!important` values.
-
-### Examples:
-
-Here are some CSS examples showcasing the behavior of the plugin:
-
-#### Example A: Without !important
-
-```css
-/* Input A */
-.button {
-  color: red;
-  color: blue;
-}
-
-/* Output A */
-.button {
-  color: blue;
-}
-```
-
-#### Example B: With !important
-
-```css
-/* Input B */
-.button {
-  color: red !important;
-  color: yellow !important;
-  color: blue;
-}
-.card {
-  display: flex !important;
-  display: block;
-}
-
-/* Output B */
-.button {
-  color: yellow !important;
-}
-.card {
-  display: flex !important;
-}
-```
-
-## Configuration
-
-Integrating [PostCSS Remove Duplicate Values] into your [PostCSS] configuration is straightforward. Add it to your list of plugins:
-
+### 2. Use in PostCSS
 ```js
-const postcss = require('postcss');
-const removeDuplicateValues = require('postcss-remove-duplicate-values');
-
-const css = `
-.button {
-  color: red;
-  color: blue;
-}`;
-
-// Example 1: Using plugins array
-postcss([
-  removeDuplicateValues({
-    // options here
-  }),
-])
-  .process(css, { from: undefined })
-  .then(result => {
-    console.log(result.css);
-  });
-
-// Example 2: Using use() method
-postcss()
-  .use(
-    removeDuplicateValues({
-      /* options */
-    }),
-  )
-  .process(css, { from: undefined })
-  .then(result => {
-    console.log(result.css);
-  });
-```
-
-If you are using `postcss.config.js`, you can include it as follows:
-
-```js
-module.exports = {
-  plugins: [require('postcss-remove-duplicate-values')],
-};
-```
-
-For more customization, you can pass options to the plugin:
-
-```js
-const removeDuplicateValues = require('postcss-remove-duplicate-values');
+// postcss.config.js
 module.exports = {
   plugins: [
-    removeDuplicateValues({
-      // options here
-    }),
-  ],
-};
+    require('postcss-remove-duplicate-values')
+  ]
+}
 ```
 
-## Options
+### 3. That's it! 🎉
+The plugin automatically removes duplicates from your CSS.
+
+## 📖 Examples
+
+### Basic Duplicate Removal
+```css
+/* Before */
+.button {
+  color: red;
+  color: blue;
+  margin: 10px;
+  margin: 20px;
+}
+
+/* After */
+.button {
+  color: blue;
+  margin: 20px;
+}
+```
+
+### `!important` Handling
+```css
+/* Before */
+.button {
+  color: red !important;
+  color: blue;
+  font-weight: normal;
+  font-weight: bold !important;
+}
+
+/* After */
+.button {
+  color: red !important;
+  font-weight: bold !important;
+}
+```
+
+### Vendor Prefixes
+```css
+/* Before */
+.button {
+  transform: translateX(40px);
+  -webkit-transform: translateX(10px);
+  -moz-transform: translateX(10px);
+  transform: translateX(10px);
+}
+
+/* After */
+.button {
+  /* Plugin removes duplicate 'transform' properties, keeping the last one */
+  /* Vendor prefixes are preserved */
+  -webkit-transform: translateX(10px);
+  -moz-transform: translateX(10px);
+  transform: translateX(10px);
+}
+```
+
+## ⚙️ Configuration Options
 
 Before applying the plugin, you can configure the following options:
 
@@ -129,74 +106,152 @@ Before applying the plugin, you can configure the following options:
 | [`selector`](#selector)           | `(selector: string) => boolean \| string \| RegExp` | `undefined` |
 | [`preserveEmpty`](#preserveempty) | `boolean`                                           | `false`     |
 
-#### selector
+### selector
+Filter which CSS selectors to process.
 
-The selector option specifies the selector to consider while removing duplicate values. This option allows you to target specific selectors for duplicate value removal. Default its undefined i.e. apply to all rules. Selector can be defined as:
+```js
+// Only process .button selectors
+removeDuplicateValues({
+  selector: '.button'
+})
 
-- **String**: A CSS selector string. Only rules matching this selector will have their duplicate values removed.
-- **RegExp**: A regular expression. Rules with selectors matching this regular expression will have their duplicate values removed.
-- **Function**: `(selector: string) => boolean` A function that takes a selector string as input and returns a boolean value indicating whether the selector should be considered for duplicate value removal.
+// Process selectors matching regex
+removeDuplicateValues({
+  selector: /^\.btn-/
+})
 
-**Example**:
-
-```css
-/* Input CSS */
-.container {
-  display: block;
-  color: red;
-  color: blue;
-}
-
-.button {
-  display: flex;
-  color: green;
-}
-```
-
-If we set selector `.container`, only the properties within the .container selector will be considered for duplicate value removal. Similarly, you can use regular expressions or custom functions to match specific selectors for this operation.
-
-```css
-/* Output CSS */
-.container {
-  display: block;
-  color: blue;
-}
-
-.button {
-  display: flex;
-  color: green;
-}
+// Custom function
+removeDuplicateValues({
+  selector: (selector) => selector.includes('button')
+})
 ```
 
 ### preserveEmpty
+Keep or remove empty CSS rules.
 
-The `preserveEmpty` option determines whether empty selectors should be preserved or removed during the process of removing duplicate values. An empty selector is a selector without any properties.
+```js
+// Remove empty rules (default)
+removeDuplicateValues({
+  preserveEmpty: false
+})
 
-**Example**:
-Consider the following CSS:
+// Keep empty rules
+removeDuplicateValues({
+  preserveEmpty: true
+})
+```
 
+## 🔧 Advanced Usage
+
+### With PostCSS API
+```js
+const postcss = require('postcss')
+const removeDuplicateValues = require('postcss-remove-duplicate-values')
+
+const css = `
+.button {
+  color: red;
+  color: blue;
+}`
+
+postcss([removeDuplicateValues()])
+  .process(css)
+  .then(result => {
+    console.log(result.css)
+    // Output: .button { color: blue; }
+  })
+```
+
+### With Build Tools
+```js
+// webpack.config.js
+module.exports = {
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader',
+          {
+            loader: 'postcss-loader',
+            options: {
+              plugins: [
+                require('postcss-remove-duplicate-values')
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+
+## 📚 More Examples
+
+### Selector Filtering
 ```css
 /* Input CSS */
-.classA {
+.container {
+  color: red;
+  color: blue;
 }
-
-.classB {
-  /* some comment */
-}
-
 .button {
-  display: block;
+  margin: 10px;
+  margin: 20px;
+}
+
+/* With selector: '.container' */
+.container {
+  color: blue;
+}
+.button {
+  margin: 10px;
+  margin: 20px; /* Not processed */
 }
 ```
 
-If `preserveEmpty` is set to false, the empty selector `.somecss` will be removed during the process. If set to true, the empty selector will be preserved in the output.
-
+### Empty Rule Handling
 ```css
-/* Output CSS */
+/* Input CSS */
+.empty-rule {
+}
 .button {
-  display: block;
+  color: blue;
+}
+
+/* With preserveEmpty: false */
+.button {
+  color: blue;
+}
+/* .empty-rule removed */
+
+/* With preserveEmpty: true */
+.empty-rule {
+}
+.button {
+  color: blue;
 }
 ```
+
+## 🎮 Try It Live!
+
+**Test the plugin in real-time with our interactive playground:**
+
+[🎮 **Try the Playground** →](https://xettri.github.io/postcss-remove-duplicate-values)
+
+### What You Can Do in the Playground:
+- ✨ **Test CSS processing** in real-time
+- 🎯 **Experiment with options** (selector filtering, empty rule preservation)
+- 📚 **Try pre-built examples** for common scenarios
+- 📊 **See live statistics** of duplicate removal results
+- 🎨 **Understand plugin behavior** through interactive examples
+
+<br>
+
+**Made with ❤️ by [Bharat Rawat](https://bharatrawat.com)**
 
 [PostCSS Remove Duplicate Values]: https://github.com/xettri/postcss-remove-duplicate-values
 [npm_url]: https://www.npmjs.com/package/postcss-remove-duplicate-values
