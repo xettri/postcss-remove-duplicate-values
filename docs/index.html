@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PostCSS Remove Duplicate Values - Official Playground</title>
+    <meta name="description" content="Interactive playground to test PostCSS Remove Duplicate Values plugin. Remove duplicate CSS properties, test selector filtering, and optimize your stylesheets in real-time.">
+    <meta name="keywords" content="PostCSS, CSS optimization, duplicate removal, CSS tools, web performance, build tools">
+    <meta name="author" content="Bharat Rawat">
+    <meta name="author" content="https://bharatrawat.com">
+    <link rel="author" href="https://bharatrawat.com">
+    <meta property="og:title" content="PostCSS Remove Duplicate Values - Interactive Playground">
+    <meta property="og:description" content="Test CSS duplicate removal, selector filtering, and optimization in real-time">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://xettri.github.io/postcss-remove-duplicate-values">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="https://www.bharatrawat.com/favicon.ico"
+    />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              mono: [
+                'JetBrains Mono',
+                'Monaco',
+                'Menlo',
+                'Ubuntu Mono',
+                'monospace',
+              ],
+            },
+            colors: {
+              dark: {
+                50: '#f8fafc',
+                100: '#f1f5f9',
+                200: '#e2e8f0',
+                300: '#cbd5e1',
+                400: '#94a3b8',
+                500: '#64748b',
+                600: '#475569',
+                700: '#334155',
+                800: '#1e293b',
+                900: '#0f172a',
+                950: '#020617',
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/node-snackbar@0.1.16/dist/snackbar.min.css"
+    />
+    <link rel="stylesheet" href="styles/index.css" />
+    <link rel="stylesheet" href="styles/editor.css" />
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "PostCSS Remove Duplicate Values",
+      "description": "Interactive playground to test PostCSS plugin for removing duplicate CSS properties and optimizing stylesheets",
+      "url": "https://xettri.github.io/postcss-remove-duplicate-values",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Web Browser",
+      "softwareVersion": "2.0.0",
+      "downloadUrl": "https://www.npmjs.com/package/postcss-remove-duplicate-values",
+      "author": {
+        "@type": "Person",
+        "name": "Bharat Rawat",
+        "url": "https://bharatrawat.com",
+        "jobTitle": "Software Engineer",
+        "knowsAbout": ["PostCSS", "CSS Optimization", "Web Performance", "Build Tools", "Developer Tools"],
+        "sameAs": [
+          "https://github.com/xettri",
+          "https://www.npmjs.com/~xettri"
+        ]
+      },
+      "creator": {
+        "@type": "Person",
+        "name": "Bharat Rawat",
+        "url": "https://bharatrawat.com"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Bharat Rawat",
+        "url": "https://bharatrawat.com"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock"
+      },
+      "keywords": "PostCSS, CSS optimization, duplicate removal, web performance, build tools, developer tools",
+      "inLanguage": "en",
+      "isAccessibleForFree": true
+    }
+    </script>
+  </head>
+  <body class="bg-dark-900 min-h-screen text-gray-100">
+    <!-- Header -->
+    <header class="gradient-bg text-white shadow-2xl border-b border-dark-700">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <div
+              class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg"
+            >
+              <i class="fas fa-magic text-white text-2xl"></i>
+            </div>
+            <div>
+              <h1 class="text-2xl font-bold">
+                PostCSS Remove Duplicate Values
+              </h1>
+              <p class="text-blue-200 text-sm">
+                Official Interactive Playground
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center space-x-6">
+            <a
+              href="https://github.com/xettri/postcss-remove-duplicate-values"
+              target="_blank"
+              class="text-gray-300 hover:text-white transition-all duration-200 hover:scale-110"
+            >
+              <i class="fab fa-github text-2xl"></i>
+            </a>
+            <a
+              href="https://www.npmjs.com/package/postcss-remove-duplicate-values"
+              target="_blank"
+              class="text-red-500 hover:text-red-400 transition-all duration-200 hover:scale-110"
+            >
+              <i class="fab fa-npm text-3xl"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12">
+      <!-- Plugin Options -->
+      <div class="mb-12 fade-in-up">
+        <div
+          class="bg-gradient-to-br from-dark-800/80 to-dark-900/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-dark-600/50 p-8"
+        >
+          <h3 class="text-2xl font-bold text-white mb-8 flex items-center">
+            <div
+              class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mr-4 shadow-lg"
+            >
+              <i class="fas fa-sliders-h text-white text-xl"></i>
+            </div>
+            Plugin Configuration
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <div>
+              <label class="block text-sm font-medium text-gray-300 mb-3"
+                >Selector Filter</label
+              >
+              <input
+                type="text"
+                id="selectorInput"
+                placeholder="e.g., .button, [data-*], /^\.btn-/"
+                class="w-full px-4 py-3 bg-dark-700 border border-dark-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent h-[60px]"
+              />
+              <p class="text-xs text-gray-500 mt-2">
+                Leave empty to process all selectors
+              </p>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-300 mb-3"
+                >Preserve Empty Rules</label
+              >
+              <div
+                class="flex items-center justify-between p-4 bg-dark-700 rounded-lg border border-dark-600 h-[60px]"
+              >
+                <div>
+                  <p class="text-sm text-gray-300">
+                    Remove empty rules by default
+                  </p>
+                  <p class="text-xs text-gray-500">
+                    Toggle to preserve empty rules
+                  </p>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="preserveEmptyToggle" />
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Examples -->
+      <div class="mb-12 fade-in-up" style="animation-delay: 0.1s">
+        <div
+          class="bg-gradient-to-br from-dark-800/60 to-dark-900/60 backdrop-blur-xl rounded-3xl shadow-2xl border border-dark-600/30 p-8"
+        >
+          <div class="text-center mb-8">
+            <h2
+              class="text-3xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-3"
+            >
+              Quick Test Examples
+            </h2>
+            <p class="text-gray-300 text-lg">Select a test scenario to begin</p>
+          </div>
+
+          <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
+            <button onclick="loadExample('basic')" class="example-btn">
+              <span class="example-text">Basic</span>
+            </button>
+            <button onclick="loadExample('important')" class="example-btn">
+              <span class="example-text">!important</span>
+            </button>
+            <button onclick="loadExample('vendor')" class="example-btn">
+              <span class="example-text">Vendor</span>
+            </button>
+            <button onclick="loadExample('colors')" class="example-btn">
+              <span class="example-text">Colors</span>
+            </button>
+            <button onclick="loadExample('selector')" class="example-btn">
+              <span class="example-text">Selector</span>
+            </button>
+            <button onclick="loadExample('complex')" class="example-btn">
+              <span class="example-text">Complex</span>
+            </button>
+            <button onclick="loadExample('empty')" class="example-btn">
+              <span class="example-text">Empty</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Editor Section -->
+      <div
+        class="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-12 fade-in-up"
+        style="animation-delay: 0.2s"
+      >
+        <div
+          class="bg-gradient-to-br from-dark-800/80 to-dark-900/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-dark-600/50 overflow-hidden"
+        >
+          <div
+            class="bg-gradient-to-r from-green-600/20 to-green-500/20 px-6 py-4 border-b border-green-500/30"
+          >
+            <h3 class="text-xl font-bold text-white flex items-center">
+              <div
+                class="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center mr-3 shadow-lg"
+              >
+                <i class="fas fa-edit text-white text-lg"></i>
+              </div>
+              Input CSS
+            </h3>
+          </div>
+          <textarea
+            id="inputCSS"
+            class="w-full h-96 p-6 code-editor bg-dark-900 text-green-400 resize-none scrollbar-thin"
+            placeholder="Enter your CSS here..."
+          >
+/* Test your CSS here */
+.button {
+  color: red;
+  color: blue;
+  margin: 10px;
+  margin: 20px;
+}
+
+.card {
+  display: block;
+  display: flex;
+  background: white;
+  background: #fff;
+}</textarea
+          >
+        </div>
+
+        <div
+          class="bg-gradient-to-br from-dark-800/80 to-dark-900/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-dark-600/50 overflow-hidden"
+        >
+          <div
+            class="bg-gradient-to-r from-blue-600/20 to-blue-500/20 px-6 py-4 border-b border-blue-500/30"
+          >
+            <h3
+              class="text-xl font-bold text-white flex items-center justify-between"
+            >
+              <div class="flex items-center">
+                <div
+                  class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mr-3 shadow-lg"
+                >
+                  <i class="fas fa-code text-white text-lg"></i>
+                </div>
+                Output CSS
+              </div>
+              <div class="flex space-x-2">
+                <button
+                  onclick="clearResults()"
+                  id="clearButton"
+                  class="bg-gradient-to-r from-dark-700 to-dark-600 hover:from-dark-600 hover:to-dark-500 text-gray-200 hover:text-white font-semibold py-2 px-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-sm opacity-0 pointer-events-none"
+                  style="
+                    transition:
+                      opacity 0.3s ease,
+                      transform 0.2s ease;
+                  "
+                >
+                  <i class="fas fa-trash mr-2"></i>
+                  Clear
+                </button>
+                <button
+                  onclick="copyResults()"
+                  id="copyButton"
+                  class="bg-gradient-to-r from-dark-700 to-dark-600 hover:from-dark-600 hover:to-dark-500 text-gray-200 hover:text-white font-semibold py-2 px-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-sm opacity-0 pointer-events-none"
+                  style="
+                    transition:
+                      opacity 0.3s ease,
+                      transform 0.2s ease;
+                  "
+                >
+                  <i class="fas fa-copy mr-2"></i>
+                  Copy
+                </button>
+              </div>
+            </h3>
+          </div>
+          <textarea
+            id="outputCSS"
+            readonly
+            class="w-full h-96 p-6 code-editor bg-dark-900 text-blue-400 resize-none scrollbar-thin"
+            placeholder="Processed CSS will appear here..."
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="text-center mb-12 fade-in-up" style="animation-delay: 0.3s">
+        <button
+          onclick="processCSS()"
+          class="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 text-white font-bold py-4 px-10 rounded-2xl shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 mr-6 text-lg"
+        >
+          <i class="fas fa-bolt mr-3 text-xl"></i>
+          Process CSS
+        </button>
+      </div>
+
+      <!-- Results Section -->
+      <div class="fade-in-up" style="animation-delay: 0.4s">
+        <div
+          class="bg-gradient-to-br from-dark-800/80 to-dark-900/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-dark-600/50 p-8"
+        >
+          <h3 class="text-2xl font-bold text-white mb-8 flex items-center">
+            <div
+              class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mr-4 shadow-lg"
+            >
+              <i class="fas fa-chart-bar text-white text-xl"></i>
+            </div>
+            Processing Results
+          </h3>
+
+          <div class="grid grid-cols-2 md:grid-cols-5 gap-6 mb-6">
+            <div
+              class="stat-card bg-gradient-to-br from-blue-900/50 to-blue-800/50 border-blue-600"
+            >
+              <div class="stat-number text-blue-300" id="inputRules">0</div>
+              <div class="stat-label text-blue-200">Input Rules</div>
+            </div>
+            <div
+              class="stat-card bg-gradient-to-br from-green-900/50 to-green-800/50 border-green-600"
+            >
+              <div class="stat-number text-green-300" id="outputRules">0</div>
+              <div class="stat-label text-green-200">Output Rules</div>
+            </div>
+            <div
+              class="stat-card bg-gradient-to-br from-yellow-900/50 to-yellow-800/50 border-yellow-600"
+            >
+              <div class="stat-number text-yellow-300" id="duplicatesRemoved">
+                0
+              </div>
+              <div class="stat-label text-yellow-200">Duplicates Removed</div>
+            </div>
+            <div
+              class="stat-card bg-gradient-to-br from-red-900/50 to-red-800/50 border-red-600"
+            >
+              <div class="stat-number text-red-300" id="emptyRulesRemoved">
+                0
+              </div>
+              <div class="stat-label text-red-200">Empty Rules Removed</div>
+            </div>
+            <div
+              class="stat-card bg-gradient-to-br from-purple-900/50 to-purple-800/50 border-purple-600"
+            >
+              <div class="stat-number text-purple-300" id="rulesSkipped">0</div>
+              <div class="stat-label text-purple-200">Rules Skipped</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Features Section -->
+      <div class="mt-16 fade-in-up" style="animation-delay: 0.5s">
+        <div
+          class="bg-gradient-to-br from-dark-800/80 to-dark-900/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-dark-600/50 p-8"
+        >
+          <h3 class="text-2xl font-bold text-white mb-8 flex items-center">
+            <div
+              class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mr-4 shadow-lg"
+            >
+              <i class="fas fa-rocket text-white text-xl"></i>
+            </div>
+            Plugin Features
+          </h3>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div class="feature-card">
+              <div class="text-center mb-3">
+                <i class="fas fa-copy text-2xl text-blue-400 mb-2"></i>
+              </div>
+              <h4 class="font-semibold text-white mb-2">Duplicate Removal</h4>
+              <p class="text-sm text-gray-400">
+                Intelligently removes duplicate CSS properties while preserving
+                the last declaration
+              </p>
+            </div>
+            <div class="feature-card">
+              <div class="text-center mb-3">
+                <i
+                  class="fas fa-exclamation-triangle text-2xl text-yellow-400 mb-2"
+                ></i>
+              </div>
+              <h4 class="font-semibold text-white mb-2">!important Handling</h4>
+              <p class="text-sm text-gray-400">
+                Properly handles !important declarations with priority-based
+                logic
+              </p>
+            </div>
+            <div class="feature-card">
+              <div class="text-center mb-3">
+                <i class="fas fa-tags text-2xl text-green-400 mb-2"></i>
+              </div>
+              <h4 class="font-semibold text-white mb-2">Vendor Prefixes</h4>
+              <p class="text-sm text-gray-400">
+                Smart handling of vendor-prefixed properties and fallbacks
+              </p>
+            </div>
+            <div class="feature-card">
+              <div class="text-center mb-3">
+                <i class="fas fa-filter text-2xl text-purple-400 mb-2"></i>
+              </div>
+              <h4 class="font-semibold text-white mb-2">Selector Filtering</h4>
+              <p class="text-sm text-gray-400">
+                Process only specific selectors using string, RegExp, or
+                function matching
+              </p>
+            </div>
+            <div class="feature-card">
+              <div class="text-center mb-3">
+                <i class="fas fa-broom text-2xl text-red-400 mb-2"></i>
+              </div>
+              <h4 class="font-semibold text-white mb-2">Empty Rule Cleanup</h4>
+              <p class="text-sm text-gray-400">
+                Optionally remove empty CSS rules for cleaner output
+              </p>
+            </div>
+            <div class="feature-card">
+              <div class="text-center mb-3">
+                <i class="fas fa-rocket text-2xl text-indigo-400 mb-2"></i>
+              </div>
+              <h4 class="font-semibold text-white mb-2">Zero Configuration</h4>
+              <p class="text-sm text-gray-400">
+                Works out of the box with sensible defaults and optional
+                customization
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="sr-only" aria-hidden="true">
+      <p>PostCSS Remove Duplicate Values plugin developed by <a href="https://bharatrawat.com" rel="author" title="Bharat Rawat - Software Engineer">Bharat Rawat</a></p>
+      <p>Visit <a href="https://bharatrawat.com" rel="me" title="Bharat Rawat's Portfolio">bharatrawat.com</a> for more open source contributions and development work</p>
+      <p>Software engineer specializing in web performance, build tools, and developer experience</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/css/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/display/placeholder.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/node-snackbar@0.1.16/dist/snackbar.min.js"></script>
+    <script src="scripts/index.js"></script>
+  </body>
+</html>

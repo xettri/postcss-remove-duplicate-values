@@ -1,0 +1,54 @@
+name: Release Package
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish_type:
+        description: 'Choose publish type: dry-run, main'
+        required: true
+        default: 'dry-run'
+        type: choice
+        options:
+          - dry-run
+          - main
+      confirm_publish:
+        description: 'Type YES to confirm publishing (required for main release)'
+        required: false
+        default: ''
+
+permissions:
+  id-token: write
+
+jobs:
+  publish:
+    if: ${{ (github.event.inputs.publish_type == 'main' && github.event.inputs.confirm_publish == 'YES' && github.ref_name == 'main') || github.event.inputs.publish_type == 'dry-run' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8.9.2
+
+      - name: Install dependencies
+        run: pnpm i
+
+      - name: Publish package (dry)
+        if: ${{github.event.inputs.publish_type == 'dry-run' }}
+        run: pnpm release:dry --no-git-checks
+
+      - name: Publish package
+        if: ${{ github.event.inputs.publish_type == 'main' }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          REPOSITORY: ${{ github.repository }}
+          REF: ${{ github.ref }}
+        run: pnpm release:latest

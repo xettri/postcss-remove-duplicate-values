@@ -1,35 +1,44 @@
 {
   "name": "postcss-remove-duplicate-values",
-  "version": "1.0.0",
-  "description": "A PostCSS plugin that removes duplicate CSS property values within rules, optimizing stylesheet size and improving maintainability.",
-  "main": "index.js",
-  "types": "index.d.ts",
-  "files": [
-    "index.js",
-    "index.d.ts",
-    "LICENSE",
-    "README.md"
-  ],
+  "private": true,
+  "version": "2.0.0",
+  "description": "🚀 PostCSS plugin that intelligently removes duplicate CSS properties, reduces bundle size, and improves CSS maintainability. Handles !important declarations, vendor prefixes, and selector filtering with zero configuration.",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "release": "pnpm build && cd dist && npm publish --access public --tag latest",
+    "release:latest": "pnpm release --tag latest",
+    "release:rc": "pnpm release --tag rc",
+    "release:dry": "pnpm release --dry-run --tag dry",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "format": "prettier --write ."
+  },
   "keywords": [
     "css",
     "postcss",
-    "postcss-plugin"
+    "postcss-plugin",
+    "performance",
+    "bundle-optimization"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xettri/postcss-remove-duplicate-values.git"
+    "url": "https://github.com/xettri/postcss-remove-duplicate-values.git"
   },
   "author": {
     "name": "Bharat Rawat",
-    "url": "https://bharatrawat.com",
-    "email": "imbharatrawat@gmail.com"
+    "url": "https://bharatrawat.com"
   },
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/xettri/postcss-remove-duplicate-values/issues"
-  },
   "homepage": "https://github.com/xettri/postcss-remove-duplicate-values#readme",
   "peerDependencies": {
     "postcss": "^8.4"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "postcss": "^8.4.31",
+    "prettier": "^3.6.2"
   }
 }
