@@ -1,15 +1,17 @@
 {
   "name": "postcss-remove-duplicate-values",
+  "private": true,
   "version": "1.0.0",
   "description": "A PostCSS plugin that removes duplicate CSS property values within rules, optimizing stylesheet size and improving maintainability.",
-  "main": "index.js",
-  "types": "index.d.ts",
-  "files": [
-    "index.js",
-    "index.d.ts",
-    "LICENSE",
-    "README.md"
-  ],
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "release": "pnpm build && cd dist && npm publish --access public --tag latest",
+    "release:latest": "pnpm release --tag latest",
+    "release:rc": "pnpm release --tag rc",
+    "release:dry": "pnpm release --dry-run --tag dry"
+  },
   "keywords": [
     "css",
     "postcss",
@@ -25,9 +27,6 @@
     "email": "imbharatrawat@gmail.com"
   },
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/xettri/postcss-remove-duplicate-values/issues"
-  },
   "homepage": "https://github.com/xettri/postcss-remove-duplicate-values#readme",
   "peerDependencies": {
     "postcss": "^8.4"
