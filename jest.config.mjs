@@ -1,10 +1,10 @@
 export default {
-  testEnvironment: "node",
-  testMatch: ["<rootDir>/__tests__/**/*.test.js"],
+  testEnvironment: 'node',
+  testMatch: ['<rootDir>/__tests__/**/*.test.js'],
   collectCoverageFrom: [
-    "src/index.js",
-    "!**/node_modules/**",
-    "!**/coverage/**",
+    'src/index.js',
+    '!**/node_modules/**',
+    '!**/coverage/**',
   ],
   coverageThreshold: {
     global: {

@@ -1,18 +1,18 @@
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
-import pkg from "../package.json" with { type: "json" };
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import pkg from '../package.json' with { type: 'json' };
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const rootDir = path.join(__dirname, "..");
-const srcDir = path.resolve(rootDir, "src");
-const distDir = path.resolve(rootDir, "dist");
+const rootDir = path.join(__dirname, '..');
+const srcDir = path.resolve(rootDir, 'src');
+const distDir = path.resolve(rootDir, 'dist');
 
 function ensureDist() {
-  if(fs.existsSync(distDir)){
-    fs.rmSync(distDir, { recursive: true, force: true })
+  if (fs.existsSync(distDir)) {
+    fs.rmSync(distDir, { recursive: true, force: true });
   }
   fs.mkdirSync(distDir, { recursive: true });
 }
@@ -31,7 +31,7 @@ function copySrcFiles() {
 }
 
 function copyPluginRootFiles() {
-  const rootFiles = ["LICENSE", "README.md"];
+  const rootFiles = ['LICENSE', 'README.md'];
   for (const file of rootFiles) {
     const rootFilePath = path.join(rootDir, file);
     const distFilePath = path.join(distDir, file);
@@ -43,18 +43,21 @@ function copyPluginRootFiles() {
   }
 }
 
-function createPackageJson(){
-  const data = {...pkg}
-  delete data.scripts
+function createPackageJson() {
+  const data = { ...pkg };
+  delete data.scripts;
   delete data.private;
   delete data.devDependencies;
 
   const packageJson = {
     ...data,
-    main: "./index.js",
-    types: "./index.d.ts",
-  }
-  fs.writeFileSync(path.join(distDir, "package.json"), JSON.stringify(packageJson, null, 2));
+    main: './index.js',
+    types: './index.d.ts',
+  };
+  fs.writeFileSync(
+    path.join(distDir, 'package.json'),
+    JSON.stringify(packageJson, null, 2),
+  );
 }
 
 async function build() {
@@ -62,7 +65,7 @@ async function build() {
   copySrcFiles();
   copyPluginRootFiles();
   createPackageJson();
-  console.log("🎉 Build completed successfully!");
+  console.log('🎉 Build completed successfully!');
 }
 
 build();

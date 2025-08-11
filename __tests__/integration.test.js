@@ -10,9 +10,11 @@ describe('Integration Tests', () => {
           color: blue;
         }
       `;
-      
-      const result = await postcss([plugin()]).process(input, { from: undefined });
-      
+
+      const result = await postcss([plugin()]).process(input, {
+        from: undefined,
+      });
+
       expect(result.css).toContain('color: blue');
       expect(result.css).not.toContain('color: red');
       expect(result.css).toMatch(/\.test\s*\{\s*color:\s*blue;\s*\}/);
@@ -29,9 +31,12 @@ describe('Integration Tests', () => {
           margin: 20px;
         }
       `;
-      
-      const result = await postcss([plugin({ selector: '.button' })]).process(input, { from: undefined });
-      
+
+      const result = await postcss([plugin({ selector: '.button' })]).process(
+        input,
+        { from: undefined },
+      );
+
       expect(result.css).toContain('color: blue');
       expect(result.css).not.toContain('color: red');
       expect(result.css).toContain('margin: 10px');
@@ -46,13 +51,13 @@ describe('Integration Tests', () => {
           background: white;
         }
       `;
-      
+
       // Simulate a plugin chain
       const result = await postcss([
         plugin(),
         // Add another plugin here if needed
       ]).process(input, { from: undefined });
-      
+
       expect(result.css).toContain('color: blue');
       expect(result.css).toContain('background: white');
       expect(result.css).not.toContain('color: red');
@@ -67,9 +72,11 @@ describe('Integration Tests', () => {
           color: blue;
         }
       `;
-      
-      const result = await postcss([plugin(undefined)]).process(input, { from: undefined });
-      
+
+      const result = await postcss([plugin(undefined)]).process(input, {
+        from: undefined,
+      });
+
       expect(result.css).toContain('color: blue');
       expect(result.css).not.toContain('color: red');
     });
@@ -81,9 +88,11 @@ describe('Integration Tests', () => {
           color: blue;
         }
       `;
-      
-      const result = await postcss([plugin({})]).process(input, { from: undefined });
-      
+
+      const result = await postcss([plugin({})]).process(input, {
+        from: undefined,
+      });
+
       expect(result.css).toContain('color: blue');
       expect(result.css).not.toContain('color: red');
     });
@@ -95,9 +104,12 @@ describe('Integration Tests', () => {
           color: blue;
         }
       `;
-      
-      const result = await postcss([plugin({ preserveEmpty: true })]).process(input, { from: undefined });
-      
+
+      const result = await postcss([plugin({ preserveEmpty: true })]).process(
+        input,
+        { from: undefined },
+      );
+
       expect(result.css).toContain('color: blue');
       expect(result.css).not.toContain('color: red');
     });
@@ -128,17 +140,19 @@ describe('Integration Tests', () => {
           border-color: #0056b3;
         }
       `;
-      
-      const result = await postcss([plugin()]).process(input, { from: undefined });
-      
+
+      const result = await postcss([plugin()]).process(input, {
+        from: undefined,
+      });
+
       // Check for exact property declarations, not substrings
       const output = result.css;
-      
+
       // The plugin should keep the last declaration of each property
       expect(output).toMatch(/\bcolor:\s*#ffffff\b/);
       expect(output).toMatch(/\bbackground-color:\s*#0056b3\b/);
       expect(output).toMatch(/\bborder-color:\s*#0056b3\b/);
-      
+
       // The plugin should remove the first declaration of each property
       expect(output).not.toMatch(/\bcolor:\s*#fff\b/);
       expect(output).not.toMatch(/\bbackground-color:\s*#007bff\b/);
@@ -156,9 +170,11 @@ describe('Integration Tests', () => {
           gap: 30px;
         }
       `;
-      
-      const result = await postcss([plugin()]).process(input, { from: undefined });
-      
+
+      const result = await postcss([plugin()]).process(input, {
+        from: undefined,
+      });
+
       expect(result.css).toContain('display: flex');
       expect(result.css).toContain('grid-template-columns: repeat(4, 1fr)');
       expect(result.css).toContain('gap: 30px');
@@ -176,9 +192,11 @@ describe('Integration Tests', () => {
           animation: slideIn 0.5s ease-out;
         }
       `;
-      
-      const result = await postcss([plugin()]).process(input, { from: undefined });
-      
+
+      const result = await postcss([plugin()]).process(input, {
+        from: undefined,
+      });
+
       expect(result.css).toContain('transition: all 0.5s ease-in-out');
       expect(result.css).toContain('animation: slideIn 0.5s ease-out');
       expect(result.css).not.toContain('transition: all 0.3s ease');
@@ -197,9 +215,11 @@ describe('Integration Tests', () => {
           background: white;
         }
       `;
-      
-      const result = await postcss([plugin()]).process(input, { from: undefined });
-      
+
+      const result = await postcss([plugin()]).process(input, {
+        from: undefined,
+      });
+
       expect(result.css).toContain('color: blue');
       expect(result.css).toContain('background: white');
       expect(result.css).toContain('/* Comment */');
@@ -222,9 +242,11 @@ describe('Integration Tests', () => {
           padding: 5px;
         }
       `;
-      
-      const result = await postcss([plugin()]).process(input, { from: undefined });
-      
+
+      const result = await postcss([plugin()]).process(input, {
+        from: undefined,
+      });
+
       expect(result.css).toContain('color: blue');
       expect(result.css).toContain('margin: 20px');
       expect(result.css).toContain('padding: 5px');
@@ -241,7 +263,7 @@ describe('Integration Tests', () => {
           color: blue;
         }
       `;
-      
+
       // PostCSS will throw a syntax error for malformed CSS before our plugin runs
       await expect(async () => {
         await postcss([plugin()]).process(input, { from: undefined });
@@ -250,8 +272,10 @@ describe('Integration Tests', () => {
 
     test('should handle empty CSS input', async () => {
       const input = '';
-      
-      const result = await postcss([plugin()]).process(input, { from: undefined });
+
+      const result = await postcss([plugin()]).process(input, {
+        from: undefined,
+      });
       expect(result.css).toBe('');
     });
 
@@ -260,8 +284,10 @@ describe('Integration Tests', () => {
         /* This is a comment */
         /* Another comment */
       `;
-      
-      const result = await postcss([plugin()]).process(input, { from: undefined });
+
+      const result = await postcss([plugin()]).process(input, {
+        from: undefined,
+      });
       expect(result.css).toContain('/* This is a comment */');
       expect(result.css).toContain('/* Another comment */');
     });
@@ -270,24 +296,29 @@ describe('Integration Tests', () => {
   describe('Performance Integration', () => {
     test('should handle large CSS files efficiently', async () => {
       // Generate a large CSS file with many rules
-      const rules = Array.from({ length: 1000 }, (_, i) => `
+      const rules = Array.from(
+        { length: 1000 },
+        (_, i) => `
         .rule-${i} {
           color: red;
           color: blue;
           margin: ${i}px;
           margin: ${i * 2}px;
         }
-      `).join('\n');
-      
+      `,
+      ).join('\n');
+
       const input = rules;
-      
+
       const startTime = Date.now();
-      const result = await postcss([plugin()]).process(input, { from: undefined });
+      const result = await postcss([plugin()]).process(input, {
+        from: undefined,
+      });
       const endTime = Date.now();
-      
+
       // Should complete within reasonable time
       expect(endTime - startTime).toBeLessThan(2000);
-      
+
       // Should contain the expected output
       expect(result.css).toContain('color: blue');
       expect(result.css).toContain('margin: 1998px');
@@ -296,7 +327,9 @@ describe('Integration Tests', () => {
     });
 
     test('should handle CSS with many vendor prefixes efficiently', async () => {
-      const vendorRules = Array.from({ length: 100 }, (_, i) => `
+      const vendorRules = Array.from(
+        { length: 100 },
+        (_, i) => `
         .vendor-${i} {
           -webkit-transform: rotate(${i}deg);
           -moz-transform: rotate(${i}deg);
@@ -304,17 +337,20 @@ describe('Integration Tests', () => {
           -o-transform: rotate(${i}deg);
           transform: rotate(${i}deg);
         }
-      `).join('\n');
-      
+      `,
+      ).join('\n');
+
       const input = vendorRules;
-      
+
       const startTime = Date.now();
-      const result = await postcss([plugin()]).process(input, { from: undefined });
+      const result = await postcss([plugin()]).process(input, {
+        from: undefined,
+      });
       const endTime = Date.now();
-      
+
       // Should complete within reasonable time
       expect(endTime - startTime).toBeLessThan(1000);
-      
+
       // All vendor prefixes should be preserved
       expect(result.css).toContain('-webkit-transform: rotate(0deg)');
       expect(result.css).toContain('-moz-transform: rotate(0deg)');

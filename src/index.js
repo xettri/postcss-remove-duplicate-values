@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-const PLUGIN_NAME = "postcss-remove-duplicate-values";
+const PLUGIN_NAME = 'postcss-remove-duplicate-values';
 
 /**
  * Options For The Plugin.
@@ -31,11 +31,11 @@ const PLUGIN_NAME = "postcss-remove-duplicate-values";
  * @returns {boolean} - True if the selector should be processed
  */
 const matchSelector = (selector, walkSelector) => {
-  if (typeof selector === "string") {
+  if (typeof selector === 'string') {
     if (walkSelector.indexOf(selector) !== -1) return true;
   } else if (selector instanceof RegExp) {
     if (selector.test(walkSelector)) return true;
-  } else if (typeof selector === "function") {
+  } else if (typeof selector === 'function') {
     if (selector(walkSelector)) return true;
   }
   return false;
@@ -48,12 +48,12 @@ const matchSelector = (selector, walkSelector) => {
  * @param {string} property - The CSS property name to check
  * @returns {boolean} - True if the property is vendor-prefixed
  */
-const isValidFallbackValue = (property) => {
+const isValidFallbackValue = property => {
   return (
-    property.startsWith("-webkit-") ||
-    property.startsWith("-moz-") ||
-    property.startsWith("-ms-") ||
-    property.startsWith("-o-")
+    property.startsWith('-webkit-') ||
+    property.startsWith('-moz-') ||
+    property.startsWith('-ms-') ||
+    property.startsWith('-o-')
   );
 };
 
@@ -64,10 +64,10 @@ const isValidFallbackValue = (property) => {
  * @param {import('postcss').Rule} rule - The CSS rule to check
  * @returns {boolean} - True if the rule is empty
  */
-const isEmpty = (rule) => {
+const isEmpty = rule => {
   return (
     rule.nodes.length === 0 ||
-    rule.nodes.filter((v) => v.type !== "comment").length === 0
+    rule.nodes.filter(v => v.type !== 'comment').length === 0
   );
 };
 
@@ -85,7 +85,7 @@ const plugin = (options = {}) => {
     postcssPlugin: PLUGIN_NAME,
     Once(root) {
       try {
-        root.walkRules((rule) => {
+        root.walkRules(rule => {
           try {
             // Apply selector filtering if specified - only process matching rules
             if (selector) {
@@ -104,7 +104,7 @@ const plugin = (options = {}) => {
               const ruleDeclarations = new Map();
               const fallbackRuleDeclarations = new Map();
 
-              rule.walkDecls((declaration) => {
+              rule.walkDecls(declaration => {
                 try {
                   // Validate declaration before processing
                   if (!declaration || !declaration.prop || !declaration.value) {

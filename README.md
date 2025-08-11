@@ -66,8 +66,8 @@ Here are some CSS examples showcasing the behavior of the plugin:
 Integrating [PostCSS Remove Duplicate Values] into your [PostCSS] configuration is straightforward. Add it to your list of plugins:
 
 ```js
-const postcss = require("postcss");
-const removeDuplicateValues = require("postcss-remove-duplicate-values");
+const postcss = require('postcss');
+const removeDuplicateValues = require('postcss-remove-duplicate-values');
 
 const css = `
 .button {
@@ -82,7 +82,7 @@ postcss([
   }),
 ])
   .process(css, { from: undefined })
-  .then((result) => {
+  .then(result => {
     console.log(result.css);
   });
 
@@ -91,10 +91,10 @@ postcss()
   .use(
     removeDuplicateValues({
       /* options */
-    })
+    }),
   )
   .process(css, { from: undefined })
-  .then((result) => {
+  .then(result => {
     console.log(result.css);
   });
 ```
@@ -103,14 +103,14 @@ If you are using `postcss.config.js`, you can include it as follows:
 
 ```js
 module.exports = {
-  plugins: [require("postcss-remove-duplicate-values")],
+  plugins: [require('postcss-remove-duplicate-values')],
 };
 ```
 
 For more customization, you can pass options to the plugin:
 
 ```js
-const removeDuplicateValues = require("postcss-remove-duplicate-values");
+const removeDuplicateValues = require('postcss-remove-duplicate-values');
 module.exports = {
   plugins: [
     removeDuplicateValues({

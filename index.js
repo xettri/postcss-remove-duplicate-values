@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-const PLUGIN_NAME = "postcss-remove-duplicate-values";
+const PLUGIN_NAME = 'postcss-remove-duplicate-values';
 
 /**
  * Options For The Plugin.
@@ -29,11 +29,11 @@ const PLUGIN_NAME = "postcss-remove-duplicate-values";
  * @returns {boolean}
  */
 const matchSelector = (selector, walkSelector) => {
-  if (typeof selector === "string") {
+  if (typeof selector === 'string') {
     if (walkSelector.indexOf(selector) !== -1) return true;
   } else if (selector instanceof RegExp) {
     if (selector.test(walkSelector)) return true;
-  } else if (typeof selector === "function") {
+  } else if (typeof selector === 'function') {
     if (selector(walkSelector)) return true;
   }
   return false;
@@ -44,12 +44,12 @@ const matchSelector = (selector, walkSelector) => {
  * @param {string} value
  * @returns {boolean}
  */
-const isValidFallbackValue = (value) => {
+const isValidFallbackValue = value => {
   return (
-    value.indexOf("-webkit-") !== -1 ||
-    value.indexOf("-moz-") !== -1 ||
-    value.indexOf("-ms-") !== -1 ||
-    value.indexOf("-o-") !== -1
+    value.indexOf('-webkit-') !== -1 ||
+    value.indexOf('-moz-') !== -1 ||
+    value.indexOf('-ms-') !== -1 ||
+    value.indexOf('-o-') !== -1
   );
 };
 
@@ -58,10 +58,10 @@ const isValidFallbackValue = (value) => {
  * @param {import('postcss').Rule} rule
  * @returns {boolean}
  */
-const isEmpty = (rule) => {
+const isEmpty = rule => {
   return (
     rule.nodes.length === 0 ||
-    rule.nodes.filter((v) => v.type !== "comment").length === 0
+    rule.nodes.filter(v => v.type !== 'comment').length === 0
   );
 };
 
@@ -76,7 +76,7 @@ const plugin = (options = {}) => {
   return {
     postcssPlugin: PLUGIN_NAME,
     prepare({ root }) {
-      root.walkRules((rule) => {
+      root.walkRules(rule => {
         // if selector is passed and its fail to match with rule selector
         // then this plugin opration will not applied
         if (selector) {
@@ -101,7 +101,7 @@ const plugin = (options = {}) => {
            */
           const fallbackRuleDeclarations = new Map();
 
-          rule.walkDecls((declaration) => {
+          rule.walkDecls(declaration => {
             const key = declaration.prop;
             const value = declaration.value.trim();
             const important = Boolean(declaration.important);
@@ -110,7 +110,7 @@ const plugin = (options = {}) => {
             let currentRemoved = false;
             if (isValidFallback) {
               const fallbackRuleObject = fallbackRuleDeclarations.get(
-                `${key}:${value}`
+                `${key}:${value}`,
               );
               if (fallbackRuleObject) {
                 if (fallbackRuleObject.important) {

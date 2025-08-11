@@ -5,10 +5,10 @@
 // Configuration
 const CONFIG = {
   ANIMATION_DURATION: 4000,
-  SNACKBAR_POSITION: "bottom-left",
-  TAB_INDENT: "  ",
+  SNACKBAR_POSITION: 'bottom-left',
+  TAB_INDENT: '  ',
   SELECTOR_REGEX: /([^{]+)\{([^}]*)\}/g,
-  DECLARATION_SEPARATOR: ";",
+  DECLARATION_SEPARATOR: ';',
 };
 
 // DOM Elements Cache
@@ -29,8 +29,8 @@ const DOM = {
 // Test examples with better organization
 const EXAMPLES = {
   basic: {
-    name: "Basic Duplicates",
-    description: "Simple duplicate property removal",
+    name: 'Basic Duplicates',
+    description: 'Simple duplicate property removal',
     css: `.button {
   color: red;
   color: blue;
@@ -40,8 +40,8 @@ const EXAMPLES = {
 }`,
   },
   important: {
-    name: "!important Handling",
-    description: "Handle important declarations",
+    name: '!important Handling',
+    description: 'Handle important declarations',
     css: `.button {
   color: red !important;
   color: blue;
@@ -52,8 +52,8 @@ const EXAMPLES = {
 }`,
   },
   vendor: {
-    name: "Vendor Prefixes",
-    description: "Browser compatibility handling",
+    name: 'Vendor Prefixes',
+    description: 'Browser compatibility handling',
     css: `.button {
   -webkit-transform: translateX(10px);
   -moz-transform: translateX(10px);
@@ -63,8 +63,8 @@ const EXAMPLES = {
 }`,
   },
   colors: {
-    name: "Color Variations",
-    description: "Different color formats",
+    name: 'Color Variations',
+    description: 'Different color formats',
     css: `.button {
   color: #fff;
   color: #ffffff;
@@ -75,8 +75,8 @@ const EXAMPLES = {
 }`,
   },
   selector: {
-    name: "Selector Filtering",
-    description: "Target specific selectors",
+    name: 'Selector Filtering',
+    description: 'Target specific selectors',
     css: `.button {
   color: red;
   color: blue;
@@ -91,8 +91,8 @@ const EXAMPLES = {
 }`,
   },
   complex: {
-    name: "Complex Selectors",
-    description: "Advanced CSS patterns",
+    name: 'Complex Selectors',
+    description: 'Advanced CSS patterns',
     css: `[data-button="primary"] {
   color: red;
   color: blue;
@@ -109,8 +109,8 @@ const EXAMPLES = {
 }`,
   },
   empty: {
-    name: "Empty Rules",
-    description: "Handle empty CSS rules",
+    name: 'Empty Rules',
+    description: 'Handle empty CSS rules',
     css: `.button {
   color: red;
   color: blue;
@@ -135,12 +135,12 @@ const EXAMPLES = {
 function loadExample(type) {
   const example = EXAMPLES[type];
   if (!example) {
-    showSnackbar(`Example "${type}" not found`, "error");
+    showSnackbar(`Example "${type}" not found`, 'error');
     return;
   }
 
   if (!DOM.inputCSS) {
-    console.error("Input editor not initialized");
+    console.error('Input editor not initialized');
     return;
   }
 
@@ -151,7 +151,7 @@ function loadExample(type) {
   clearOutput();
   resetStats();
 
-  showSnackbar(`Loaded: ${example.name}`, "success");
+  showSnackbar(`Loaded: ${example.name}`, 'success');
 }
 
 /**
@@ -159,19 +159,19 @@ function loadExample(type) {
  */
 async function processCSS() {
   if (!DOM.inputCSS || !DOM.outputCSS) {
-    showSnackbar("Editors not initialized", "error");
+    showSnackbar('Editors not initialized', 'error');
     return;
   }
 
   const inputText = DOM.inputCSS.value.trim();
   if (!inputText) {
-    showSnackbar("Please enter some CSS to process", "error");
+    showSnackbar('Please enter some CSS to process', 'error');
     return;
   }
 
   try {
     const options = {
-      selector: DOM.selectorInput?.value.trim() || "",
+      selector: DOM.selectorInput?.value.trim() || '',
       preserveEmpty: DOM.preserveEmptyToggle?.checked || false,
     };
 
@@ -179,10 +179,10 @@ async function processCSS() {
     updateOutput(result);
     updateStats(result);
 
-    showSnackbar("CSS processed successfully!", "success");
+    showSnackbar('CSS processed successfully!', 'success');
   } catch (error) {
-    console.error("Processing error:", error);
-    showSnackbar(`Error processing CSS: ${error.message}`, "error");
+    console.error('Processing error:', error);
+    showSnackbar(`Error processing CSS: ${error.message}`, 'error');
   }
 }
 
@@ -242,7 +242,7 @@ async function simulatePostCSS(css, options = {}) {
 
       rules.push({
         selector: selectorText,
-        content: "",
+        content: '',
         isEmpty: true,
         skipped: false,
       });
@@ -251,9 +251,9 @@ async function simulatePostCSS(css, options = {}) {
 
   // Build result CSS efficiently
   const resultCSS = rules
-    .filter((rule) => !rule.skipped || rule.content.trim())
-    .map((rule) => `${rule.selector} {\n  ${rule.content}\n}`)
-    .join("\n\n");
+    .filter(rule => !rule.skipped || rule.content.trim())
+    .map(rule => `${rule.selector} {\n  ${rule.content}\n}`)
+    .join('\n\n');
 
   return {
     css: resultCSS,
@@ -273,18 +273,18 @@ function processDeclarations(declarations) {
   const declarationMap = new Map();
   const decls = declarations
     .split(CONFIG.DECLARATION_SEPARATOR)
-    .map((d) => d.trim())
-    .filter((d) => d);
+    .map(d => d.trim())
+    .filter(d => d);
 
   // Process declarations in reverse order (last wins)
   for (let i = decls.length - 1; i >= 0; i--) {
     const decl = decls[i];
-    const [property, ...valueParts] = decl.split(":");
+    const [property, ...valueParts] = decl.split(':');
 
     if (!property || !valueParts.length) continue;
 
     const propertyName = property.trim();
-    const value = valueParts.join(":").trim();
+    const value = valueParts.join(':').trim();
 
     // Skip if already processed (last declaration wins)
     if (declarationMap.has(propertyName)) continue;
@@ -293,7 +293,7 @@ function processDeclarations(declarations) {
   }
 
   // Convert back to string, maintaining order
-  return Array.from(declarationMap.values()).join(";\n  ");
+  return Array.from(declarationMap.values()).join(';\n  ');
 }
 
 /**
@@ -306,11 +306,11 @@ function matchSelector(selectorText, filter) {
   if (!filter) return true;
 
   // Simple pattern matching
-  const patterns = filter.split(",").map((p) => p.trim());
-  return patterns.some((pattern) => {
-    if (pattern.startsWith(".")) {
+  const patterns = filter.split(',').map(p => p.trim());
+  return patterns.some(pattern => {
+    if (pattern.startsWith('.')) {
       return selectorText.includes(pattern);
-    } else if (pattern.startsWith("#")) {
+    } else if (pattern.startsWith('#')) {
       return selectorText.includes(pattern);
     } else {
       return selectorText.includes(pattern);
@@ -324,7 +324,7 @@ function matchSelector(selectorText, filter) {
  * @returns {number} Declaration count
  */
 function countDeclarations(css) {
-  return css.split(CONFIG.DECLARATION_SEPARATOR).filter((d) => d.trim()).length;
+  return css.split(CONFIG.DECLARATION_SEPARATOR).filter(d => d.trim()).length;
 }
 
 // ============================================================================
@@ -336,7 +336,7 @@ function countDeclarations(css) {
  */
 function clearOutput() {
   if (DOM.outputCSS) {
-    DOM.outputCSS.value = "";
+    DOM.outputCSS.value = '';
     hideCopyButton();
   }
 }
@@ -353,8 +353,8 @@ function clearResults() {
  * Reset all statistics to zero
  */
 function resetStats() {
-  Object.values(DOM.stats).forEach((element) => {
-    if (element) element.textContent = "0";
+  Object.values(DOM.stats).forEach(element => {
+    if (element) element.textContent = '0';
   });
   hideCopyButton();
 }
@@ -390,17 +390,17 @@ function updateStats(result) {
  * Show action buttons when there's content to work with
  */
 function showCopyButton() {
-  const copyButton = document.getElementById("copyButton");
-  const clearButton = document.getElementById("clearButton");
+  const copyButton = document.getElementById('copyButton');
+  const clearButton = document.getElementById('clearButton');
 
   if (copyButton) {
-    copyButton.style.opacity = "1";
-    copyButton.style.pointerEvents = "auto";
+    copyButton.style.opacity = '1';
+    copyButton.style.pointerEvents = 'auto';
   }
 
   if (clearButton) {
-    clearButton.style.opacity = "1";
-    clearButton.style.pointerEvents = "auto";
+    clearButton.style.opacity = '1';
+    clearButton.style.pointerEvents = 'auto';
   }
 }
 
@@ -408,17 +408,17 @@ function showCopyButton() {
  * Hide action buttons when there's no content
  */
 function hideCopyButton() {
-  const copyButton = document.getElementById("copyButton");
-  const clearButton = document.getElementById("clearButton");
+  const copyButton = document.getElementById('copyButton');
+  const clearButton = document.getElementById('clearButton');
 
   if (copyButton) {
-    copyButton.style.opacity = "0";
-    copyButton.style.pointerEvents = "none";
+    copyButton.style.opacity = '0';
+    copyButton.style.pointerEvents = 'none';
   }
 
   if (clearButton) {
-    clearButton.style.opacity = "0";
-    clearButton.style.pointerEvents = "none";
+    clearButton.style.opacity = '0';
+    clearButton.style.pointerEvents = 'none';
   }
 }
 
@@ -430,13 +430,13 @@ async function copyResults() {
 
   const outputText = DOM.outputCSS.value;
   if (!outputText.trim()) {
-    showSnackbar("No results to copy", "warning");
+    showSnackbar('No results to copy', 'warning');
     return;
   }
 
   try {
     await navigator.clipboard.writeText(outputText);
-    showSnackbar("Results copied to clipboard!", "success");
+    showSnackbar('Results copied to clipboard!', 'success');
   } catch (error) {
     // Fallback for older browsers
     fallbackCopy(outputText);
@@ -448,21 +448,21 @@ async function copyResults() {
  * @param {string} text - Text to copy
  */
 function fallbackCopy(text) {
-  const textArea = document.createElement("textarea");
+  const textArea = document.createElement('textarea');
   textArea.value = text;
-  textArea.style.position = "fixed";
-  textArea.style.left = "-999999px";
-  textArea.style.top = "-999999px";
+  textArea.style.position = 'fixed';
+  textArea.style.left = '-999999px';
+  textArea.style.top = '-999999px';
 
   document.body.appendChild(textArea);
   textArea.focus();
   textArea.select();
 
   try {
-    document.execCommand("copy");
-    showSnackbar("Results copied to clipboard!", "success");
+    document.execCommand('copy');
+    showSnackbar('Results copied to clipboard!', 'success');
   } catch (error) {
-    showSnackbar("Failed to copy results", "error");
+    showSnackbar('Failed to copy results', 'error');
   } finally {
     document.body.removeChild(textArea);
   }
@@ -473,18 +473,18 @@ function fallbackCopy(text) {
  * @param {string} message - Message to display
  * @param {string} type - Message type (success, error, warning, info)
  */
-function showSnackbar(message, type = "info") {
+function showSnackbar(message, type = 'info') {
   const config = {
     text: message,
     duration: CONFIG.ANIMATION_DURATION,
     pos: CONFIG.SNACKBAR_POSITION,
     backgroundColor: getSnackbarColor(type),
-    textColor: "#ffffff",
-    width: "auto",
+    textColor: '#ffffff',
+    width: 'auto',
     showAction: true,
-    actionText: "Dismiss",
+    actionText: 'Dismiss',
     actionTextColor: getSnackbarActionColor(type),
-    customClass: "custom-snackbar",
+    customClass: 'custom-snackbar',
   };
 
   Snackbar.show(config);
@@ -497,10 +497,10 @@ function showSnackbar(message, type = "info") {
  */
 function getSnackbarColor(type) {
   const colors = {
-    success: "#059669",
-    error: "#dc2626",
-    warning: "#d97706",
-    info: "#3b82f6",
+    success: '#059669',
+    error: '#dc2626',
+    warning: '#d97706',
+    info: '#3b82f6',
   };
   return colors[type] || colors.info;
 }
@@ -512,10 +512,10 @@ function getSnackbarColor(type) {
  */
 function getSnackbarActionColor(type) {
   const colors = {
-    success: "#a7f3d0",
-    error: "#fecaca",
-    warning: "#fed7aa",
-    info: "#bfdbfe",
+    success: '#a7f3d0',
+    error: '#fecaca',
+    warning: '#fed7aa',
+    info: '#bfdbfe',
   };
   return colors[type] || colors.info;
 }
@@ -529,23 +529,23 @@ function getSnackbarActionColor(type) {
  */
 function initializeDOM() {
   // Main editors
-  DOM.inputCSS = document.getElementById("inputCSS");
-  DOM.outputCSS = document.getElementById("outputCSS");
+  DOM.inputCSS = document.getElementById('inputCSS');
+  DOM.outputCSS = document.getElementById('outputCSS');
 
   // Form controls
-  DOM.selectorInput = document.getElementById("selectorInput");
-  DOM.preserveEmptyToggle = document.getElementById("preserveEmptyToggle");
+  DOM.selectorInput = document.getElementById('selectorInput');
+  DOM.preserveEmptyToggle = document.getElementById('preserveEmptyToggle');
 
   // Statistics elements
-  DOM.stats.inputRules = document.getElementById("inputRules");
-  DOM.stats.outputRules = document.getElementById("outputRules");
-  DOM.stats.duplicatesRemoved = document.getElementById("duplicatesRemoved");
-  DOM.stats.emptyRulesRemoved = document.getElementById("emptyRulesRemoved");
-  DOM.stats.rulesSkipped = document.getElementById("rulesSkipped");
+  DOM.stats.inputRules = document.getElementById('inputRules');
+  DOM.stats.outputRules = document.getElementById('outputRules');
+  DOM.stats.duplicatesRemoved = document.getElementById('duplicatesRemoved');
+  DOM.stats.emptyRulesRemoved = document.getElementById('emptyRulesRemoved');
+  DOM.stats.rulesSkipped = document.getElementById('rulesSkipped');
 
   // Validate critical elements
   if (!DOM.inputCSS || !DOM.outputCSS) {
-    console.error("Critical DOM elements not found");
+    console.error('Critical DOM elements not found');
     return false;
   }
 
@@ -559,8 +559,8 @@ function initializeEditors() {
   if (!DOM.inputCSS) return;
 
   // Handle tab key for indentation
-  DOM.inputCSS.addEventListener("keydown", function (e) {
-    if (e.key === "Tab") {
+  DOM.inputCSS.addEventListener('keydown', function (e) {
+    if (e.key === 'Tab') {
       e.preventDefault();
       const start = this.selectionStart;
       const end = this.selectionEnd;
@@ -583,7 +583,7 @@ function initializeEditors() {
  */
 function initialize() {
   if (!initializeDOM()) {
-    console.error("Failed to initialize DOM");
+    console.error('Failed to initialize DOM');
     return;
   }
 
@@ -591,7 +591,7 @@ function initialize() {
 
   // Load initial example with delay to ensure DOM is ready
   setTimeout(() => {
-    loadExample("basic");
+    loadExample('basic');
   }, 100);
 }
 
@@ -600,4 +600,4 @@ function initialize() {
 // ============================================================================
 
 // Initialize when DOM is ready
-window.addEventListener("DOMContentLoaded", initialize);
+window.addEventListener('DOMContentLoaded', initialize);

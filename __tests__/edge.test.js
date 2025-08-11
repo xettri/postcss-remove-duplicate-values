@@ -2,7 +2,9 @@ const postcss = require('postcss');
 const plugin = require('../src/index.js');
 
 const getCSS = async (css, options = {}) => {
-  const result = await postcss([plugin(options)]).process(css, { from: undefined });
+  const result = await postcss([plugin(options)]).process(css, {
+    from: undefined,
+  });
   return result.css;
 };
 
@@ -17,9 +19,9 @@ describe('Edge Cases and Complex Scenarios', () => {
           }
         }
       `;
-      
+
       const output = await getCSS(input);
-      
+
       expect(output).toContain('@media (max-width: 768px)');
       expect(output).toContain('color: blue');
       expect(output).not.toContain('color: red');
@@ -38,9 +40,9 @@ describe('Edge Cases and Complex Scenarios', () => {
           }
         }
       `;
-      
+
       const output = await getCSS(input);
-      
+
       expect(output).toContain('@keyframes slide');
       expect(output).toContain('transform: translateX(0px)');
       expect(output).toContain('transform: translateX(100px)');
@@ -54,9 +56,9 @@ describe('Edge Cases and Complex Scenarios', () => {
           content: "World";
         }
       `;
-      
+
       const output = await getCSS(input);
-      
+
       expect(output).toContain('content: "World"');
       expect(output).not.toContain('content: "Hello"');
     });
@@ -68,9 +70,9 @@ describe('Edge Cases and Complex Scenarios', () => {
           border: 2px solid blue;
         }
       `;
-      
+
       const output = await getCSS(input);
-      
+
       expect(output).toContain('border: 2px solid blue');
       expect(output).not.toContain('border: 1px solid red');
     });
@@ -84,9 +86,9 @@ describe('Edge Cases and Complex Scenarios', () => {
           background-image: url('image2.jpg');
         }
       `;
-      
+
       const output = await getCSS(input);
-      
+
       expect(output).toContain("background-image: url('image2.jpg')");
       expect(output).not.toContain('background-image: url("image1.jpg")');
     });
@@ -98,9 +100,9 @@ describe('Edge Cases and Complex Scenarios', () => {
           width: calc(100% - 30px);
         }
       `;
-      
+
       const output = await getCSS(input);
-      
+
       expect(output).toContain('width: calc(100% - 30px)');
       expect(output).not.toContain('width: calc(100% - 20px)');
     });
@@ -112,9 +114,9 @@ describe('Edge Cases and Complex Scenarios', () => {
           color: var(--primary-color, blue);
         }
       `;
-      
+
       const output = await getCSS(input);
-      
+
       expect(output).toContain('color: var(--primary-color, blue)');
       expect(output).not.toContain('color: var(--primary-color, red)');
     });
@@ -126,9 +128,9 @@ describe('Edge Cases and Complex Scenarios', () => {
           background-color: rgba(0, 255, 0, 0.8);
         }
       `;
-      
+
       const output = await getCSS(input);
-      
+
       expect(output).toContain('background-color: rgba(0, 255, 0, 0.8)');
       expect(output).not.toContain('background-color: rgba(255, 0, 0, 0.5)');
     });
@@ -142,10 +144,12 @@ describe('Edge Cases and Complex Scenarios', () => {
           transform: translate3d(0, 0, 0) rotate(45deg);
         }
       `;
-      
+
       const output = await getCSS(input);
-      
-      expect(output).toContain('-webkit-transform: translate3d(0, 0, 0) rotate(45deg)');
+
+      expect(output).toContain(
+        '-webkit-transform: translate3d(0, 0, 0) rotate(45deg)',
+      );
       expect(output).toContain('transform: translate3d(0, 0, 0) rotate(45deg)');
     });
 
@@ -157,12 +161,14 @@ describe('Edge Cases and Complex Scenarios', () => {
           transform: rotate(45deg);
         }
       `;
-      
+
       const output = await getCSS(input);
-      
+
       expect(output).toContain('-webkit-transform: rotate(90deg) !important');
       expect(output).toContain('transform: rotate(45deg)');
-      expect(output).not.toContain('-webkit-transform: rotate(45deg) !important');
+      expect(output).not.toContain(
+        '-webkit-transform: rotate(45deg) !important',
+      );
     });
 
     test('should handle multiple vendor prefixes for same property', async () => {
@@ -175,9 +181,9 @@ describe('Edge Cases and Complex Scenarios', () => {
           transform: rotate(45deg);
         }
       `;
-      
+
       const output = await getCSS(input);
-      
+
       // All vendor prefixes should be preserved
       expect(output).toContain('-webkit-transform: rotate(45deg)');
       expect(output).toContain('-moz-transform: rotate(45deg)');
@@ -197,9 +203,9 @@ describe('Edge Cases and Complex Scenarios', () => {
           color: blue;
         }
       `;
-      
+
       const output = await getCSS(input);
-      
+
       expect(output).not.toContain('.whitespace-only');
       expect(output).toContain('.normal-rule');
       expect(output).toContain('color: blue');
@@ -214,9 +220,9 @@ describe('Edge Cases and Complex Scenarios', () => {
           color: blue;
         }
       `;
-      
+
       const output = await getCSS(input);
-      
+
       expect(output).not.toContain('.newline-only');
       expect(output).toContain('.normal-rule');
       expect(output).toContain('color: blue');
@@ -236,9 +242,9 @@ describe('Edge Cases and Complex Scenarios', () => {
           margin: 10px;
         }
       `;
-      
+
       const output = await getCSS(input);
-      
+
       expect(output).toContain('/* Comment */');
       expect(output).toContain('@import "styles.css"');
       expect(output).toContain('color: blue');
@@ -256,29 +262,31 @@ describe('Edge Cases and Complex Scenarios', () => {
           content: "short";
         }
       `;
-      
+
       const startTime = Date.now();
       const output = await getCSS(input);
       const endTime = Date.now();
-      
+
       expect(endTime - startTime).toBeLessThan(1000);
       expect(output).toContain('content: "short"');
       expect(output).not.toContain(longValue);
     });
 
     test('should handle many duplicate properties efficiently', async () => {
-      const duplicates = Array.from({ length: 100 }, () => 'color: red;').join('\n');
+      const duplicates = Array.from({ length: 100 }, () => 'color: red;').join(
+        '\n',
+      );
       const input = `
         .many-duplicates {
           ${duplicates}
           color: blue;
         }
       `;
-      
+
       const startTime = Date.now();
       const output = await getCSS(input);
       const endTime = Date.now();
-      
+
       expect(endTime - startTime).toBeLessThan(500);
       expect(output).toContain('color: blue');
       expect(output).not.toContain('color: red');
@@ -300,13 +308,13 @@ describe('Edge Cases and Complex Scenarios', () => {
           margin: 10px;
         }
       `;
-      
+
       const output = await getCSS(input, {
-        selector: (selector) => {
+        selector: selector => {
           return selector.includes('button') && selector.includes('primary');
-        }
+        },
       });
-      
+
       expect(output).toContain('color: blue');
       expect(output).not.toContain('color: red');
       expect(output).toContain('color: green');
@@ -325,9 +333,9 @@ describe('Edge Cases and Complex Scenarios', () => {
           color: yellow;
         }
       `;
-      
+
       const output = await getCSS(input, { selector: /\.btn-/ });
-      
+
       expect(output).toContain('color: blue');
       expect(output).toContain('color: yellow');
       expect(output).not.toContain('color: red');
@@ -345,11 +353,11 @@ describe('Edge Cases and Complex Scenarios', () => {
           margin: 20px;
         }
       `;
-      
+
       const output = await getCSS(input, {
-        selector: () => false
+        selector: () => false,
       });
-      
+
       // No selectors should be processed
       expect(output).toContain('color: red');
       expect(output).toContain('color: blue');
@@ -366,9 +374,9 @@ describe('Edge Cases and Complex Scenarios', () => {
           content: "Goodbye\\"World";
         }
       `;
-      
+
       const output = await getCSS(input);
-      
+
       expect(output).toContain('content: "Goodbye\\"World"');
       expect(output).not.toContain('content: "Hello\\"World"');
     });
@@ -380,9 +388,9 @@ describe('Edge Cases and Complex Scenarios', () => {
           content: "🎊";
         }
       `;
-      
+
       const output = await getCSS(input);
-      
+
       expect(output).toContain('content: "🎊"');
       expect(output).not.toContain('content: "🎉"');
     });

@@ -21,9 +21,9 @@ describe('postcss-remove-duplicate-values', () => {
           color: blue;
         }
       `;
-      
+
       const output = await getCSS(input);
-      
+
       expect(output).toContain('color: blue');
       expect(output).not.toContain('color: red');
       expect(output).toMatch(/\.button\s*\{\s*color:\s*blue;\s*\}/);
@@ -38,9 +38,9 @@ describe('postcss-remove-duplicate-values', () => {
           margin: 20px;
         }
       `;
-      
+
       const output = await getCSS(input);
-      
+
       expect(output).toContain('display: flex');
       expect(output).toContain('margin: 20px');
       expect(output).not.toContain('display: block');
@@ -55,9 +55,9 @@ describe('postcss-remove-duplicate-values', () => {
           font-size: 16px;
         }
       `;
-      
+
       const output = await getCSS(input);
-      
+
       expect(output).toContain('color: blue');
       expect(output).toContain('background: red');
       expect(output).toContain('font-size: 16px');
@@ -72,9 +72,9 @@ describe('postcss-remove-duplicate-values', () => {
           color: blue;
         }
       `;
-      
+
       const output = await getCSS(input);
-      
+
       expect(output).toContain('color: red !important');
       expect(output).not.toContain('color: blue');
     });
@@ -87,9 +87,9 @@ describe('postcss-remove-duplicate-values', () => {
           color: blue !important;
         }
       `;
-      
+
       const output = await getCSS(input);
-      
+
       expect(output).toContain('color: blue !important');
       expect(output).not.toContain('color: red !important');
       expect(output).not.toContain('color: yellow !important');
@@ -104,9 +104,9 @@ describe('postcss-remove-duplicate-values', () => {
           margin: 20px;
         }
       `;
-      
+
       const output = await getCSS(input);
-      
+
       expect(output).toContain('display: flex !important');
       expect(output).toContain('margin: 10px !important');
       expect(output).not.toContain('display: block');
@@ -122,9 +122,9 @@ describe('postcss-remove-duplicate-values', () => {
           -webkit-transform: rotate(45deg);
         }
       `;
-      
+
       const output = await getCSS(input);
-      
+
       // Should keep the vendor prefix as it's treated as a fallback
       expect(output).toContain('-webkit-transform: rotate(45deg)');
       expect(output).toContain('transform: rotate(45deg)');
@@ -137,9 +137,9 @@ describe('postcss-remove-duplicate-values', () => {
           transform: rotate(45deg);
         }
       `;
-      
+
       const output = await getCSS(input);
-      
+
       expect(output).toContain('-moz-transform: rotate(45deg)');
       expect(output).toContain('transform: rotate(45deg)');
     });
@@ -151,9 +151,9 @@ describe('postcss-remove-duplicate-values', () => {
           transform: rotate(45deg);
         }
       `;
-      
+
       const output = await getCSS(input);
-      
+
       expect(output).toContain('-ms-transform: rotate(45deg)');
       expect(output).toContain('transform: rotate(45deg)');
     });
@@ -165,9 +165,9 @@ describe('postcss-remove-duplicate-values', () => {
           transform: rotate(45deg);
         }
       `;
-      
+
       const output = await getCSS(input);
-      
+
       expect(output).toContain('-o-transform: rotate(45deg)');
       expect(output).toContain('transform: rotate(45deg)');
     });
@@ -179,9 +179,9 @@ describe('postcss-remove-duplicate-values', () => {
           transform: rotate(45deg);
         }
       `;
-      
+
       const output = await getCSS(input);
-      
+
       expect(output).toContain('-webkit-transform: rotate(45deg) !important');
       expect(output).toContain('transform: rotate(45deg)');
     });
@@ -199,9 +199,9 @@ describe('postcss-remove-duplicate-values', () => {
           color: yellow;
         }
       `;
-      
+
       const output = await getCSS(input, { selector: '.container' });
-      
+
       expect(output).toContain('color: blue');
       expect(output).not.toContain('color: red');
       expect(output).toContain('color: green');
@@ -222,9 +222,9 @@ describe('postcss-remove-duplicate-values', () => {
           margin: 10px;
         }
       `;
-      
+
       const output = await getCSS(input, { selector: /\.btn-/ });
-      
+
       expect(output).toContain('color: blue');
       expect(output).toContain('color: yellow');
       expect(output).not.toContain('color: red');
@@ -243,11 +243,11 @@ describe('postcss-remove-duplicate-values', () => {
           margin: 20px;
         }
       `;
-      
-      const output = await getCSS(input, { 
-        selector: (selector) => selector.includes('button') 
+
+      const output = await getCSS(input, {
+        selector: selector => selector.includes('button'),
       });
-      
+
       expect(output).toContain('color: blue');
       expect(output).not.toContain('color: red');
       expect(output).toContain('margin: 10px');
@@ -265,9 +265,9 @@ describe('postcss-remove-duplicate-values', () => {
           margin: 20px;
         }
       `;
-      
+
       const output = await getCSS(input);
-      
+
       expect(output).toContain('color: blue');
       expect(output).toContain('margin: 20px');
       expect(output).not.toContain('color: red');
@@ -284,9 +284,9 @@ describe('postcss-remove-duplicate-values', () => {
           color: blue;
         }
       `;
-      
+
       const output = await getCSS(input);
-      
+
       expect(output).not.toContain('.empty-rule');
       expect(output).toContain('.non-empty-rule');
       expect(output).toContain('color: blue');
@@ -300,9 +300,9 @@ describe('postcss-remove-duplicate-values', () => {
           color: blue;
         }
       `;
-      
+
       const output = await getCSS(input, { preserveEmpty: true });
-      
+
       expect(output).toContain('.empty-rule');
       expect(output).toContain('.non-empty-rule');
       expect(output).toContain('color: blue');
@@ -317,9 +317,9 @@ describe('postcss-remove-duplicate-values', () => {
           color: blue;
         }
       `;
-      
+
       const output = await getCSS(input);
-      
+
       expect(output).not.toContain('.comment-only');
       expect(output).toContain('.with-property');
       expect(output).toContain('color: blue');
@@ -334,9 +334,9 @@ describe('postcss-remove-duplicate-values', () => {
           color: blue;
         }
       `;
-      
+
       const output = await getCSS(input, { preserveEmpty: true });
-      
+
       expect(output).toContain('.comment-only');
       expect(output).toContain('.with-property');
       expect(output).toContain('color: blue');
@@ -353,9 +353,9 @@ describe('postcss-remove-duplicate-values', () => {
           color: yellow;
         }
       `;
-      
+
       const output = await getCSS(input);
-      
+
       expect(output).toContain('color: yellow');
       expect(output).not.toContain('color: red');
       expect(output).not.toContain('color: blue');
@@ -369,11 +369,15 @@ describe('postcss-remove-duplicate-values', () => {
           background: radial-gradient(circle, #0000ff, #ffff00);
         }
       `;
-      
+
       const output = await getCSS(input);
-      
-      expect(output).toContain('background: radial-gradient(circle, #0000ff, #ffff00)');
-      expect(output).not.toContain('background: linear-gradient(to right, #ff0000, #00ff00)');
+
+      expect(output).toContain(
+        'background: radial-gradient(circle, #0000ff, #ffff00)',
+      );
+      expect(output).not.toContain(
+        'background: linear-gradient(to right, #ff0000, #00ff00)',
+      );
     });
 
     test('should handle properties with spaces and special characters', async () => {
@@ -383,9 +387,9 @@ describe('postcss-remove-duplicate-values', () => {
           content: "Goodbye World";
         }
       `;
-      
+
       const output = await getCSS(input);
-      
+
       expect(output).toContain('content: "Goodbye World"');
       expect(output).not.toContain('content: "Hello World"');
     });
@@ -397,9 +401,9 @@ describe('postcss-remove-duplicate-values', () => {
           --color: blue;
         }
       `;
-      
+
       const output = await getCSS(input);
-      
+
       expect(output).toContain('--color: blue');
       expect(output).not.toContain('--color: red');
     });
@@ -424,15 +428,15 @@ describe('postcss-remove-duplicate-values', () => {
           padding: 20px;
         }
       `;
-      
+
       const output = await getCSS(input);
-      
+
       expect(output).toContain('background: #f0f0f0');
       expect(output).toContain('color: #333');
       expect(output).toContain('display: flex');
       expect(output).toContain('margin: 0');
       expect(output).toContain('padding: 20px');
-      
+
       expect(output).not.toContain('background: #fff');
       expect(output).not.toContain('display: block');
     });
@@ -445,13 +449,13 @@ describe('postcss-remove-duplicate-values', () => {
           background: white;
         }
       `;
-      
+
       // Simulate plugin chain
       const result = await postcss([
         plugin(),
         // Add another plugin here if needed
       ]).process(input, { from: undefined });
-      
+
       expect(result.css).toContain('color: blue');
       expect(result.css).toContain('background: white');
       expect(result.css).not.toContain('color: red');
@@ -466,7 +470,7 @@ describe('postcss-remove-duplicate-values', () => {
           color: blue;
         }
       `;
-      
+
       // PostCSS will throw a syntax error for malformed CSS before our plugin runs
       await expect(async () => {
         await getCSS(input);
@@ -475,14 +479,14 @@ describe('postcss-remove-duplicate-values', () => {
 
     test('should handle empty CSS input', async () => {
       const input = '';
-      
+
       const output = await getCSS(input);
       expect(output).toBe('');
     });
 
     test('should handle CSS with only whitespace', async () => {
       const input = '   \n  \t  ';
-      
+
       const output = await getCSS(input);
       expect(output.trim()).toBe('');
     });
@@ -490,27 +494,33 @@ describe('postcss-remove-duplicate-values', () => {
 
   describe('Performance and memory', () => {
     test('should handle large number of properties efficiently', async () => {
-      const properties = Array.from({ length: 1000 }, (_, i) => `prop${i}: value${i};`);
-      const duplicateProperties = Array.from({ length: 1000 }, (_, i) => `prop${i}: duplicate${i};`);
-      
+      const properties = Array.from(
+        { length: 1000 },
+        (_, i) => `prop${i}: value${i};`,
+      );
+      const duplicateProperties = Array.from(
+        { length: 1000 },
+        (_, i) => `prop${i}: duplicate${i};`,
+      );
+
       const input = `
         .large-rule {
           ${properties.join('\n          ')}
           ${duplicateProperties.join('\n          ')}
         }
       `;
-      
+
       const startTime = Date.now();
       const output = await getCSS(input);
       const endTime = Date.now();
-      
+
       // Should complete within reasonable time (less than 1 second)
       expect(endTime - startTime).toBeLessThan(1000);
-      
+
       // Should contain the duplicate values (last ones)
       expect(output).toContain('prop0: duplicate0');
       expect(output).toContain('prop999: duplicate999');
-      
+
       // Should not contain the original values
       expect(output).not.toContain('prop0: value0');
       expect(output).not.toContain('prop999: value999');

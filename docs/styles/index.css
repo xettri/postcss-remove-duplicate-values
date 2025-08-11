@@ -76,7 +76,7 @@ textarea::-webkit-scrollbar-thumb:hover {
 
 .toggle-slider:before {
   position: absolute;
-  content: "";
+  content: '';
   height: 18px;
   width: 18px;
   left: 3px;
@@ -288,7 +288,7 @@ button:active {
 }
 
 /* Smooth focus transitions for all form elements */
-input[type="text"],
+input[type='text'],
 textarea {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border: 1px solid transparent;
@@ -306,7 +306,7 @@ textarea {
 
 /* Custom Snackbar styling to match playground theme */
 .custom-snackbar {
-  font-family: "JetBrains Mono", monospace !important;
+  font-family: 'JetBrains Mono', monospace !important;
   font-size: 14px !important;
   font-weight: 500 !important;
   border-radius: 12px !important;
