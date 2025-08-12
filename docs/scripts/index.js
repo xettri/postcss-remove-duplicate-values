@@ -144,7 +144,7 @@ function loadExample(type, initLoad = false) {
   resetStats();
   // no need to show loaded example in case of
   // first time load with page load
-  if(initLoad) return;
+  if (initLoad) return;
   showSnackbar(`Loaded: ${example.name}`, 'success');
 }
 

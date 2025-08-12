@@ -12,6 +12,7 @@
 Automatically removes duplicate CSS properties from your stylesheets while keeping the most important ones. Perfect for cleaning up CSS and improving performance.
 
 ### 🎯 Key Features
+
 - **🧹 Removes duplicate properties** (keeps the last one)
 - **⚡ Handles `!important` declarations** intelligently
 - **🎨 Supports vendor prefixes** and modern CSS
@@ -22,6 +23,7 @@ Automatically removes duplicate CSS properties from your stylesheets while keepi
 ## 🚀 Quick Start
 
 ### 1. Install
+
 ```bash
 npm install postcss-remove-duplicate-values --save-dev
 # or
@@ -31,21 +33,22 @@ yarn add postcss-remove-duplicate-values -D
 ```
 
 ### 2. Use in PostCSS
+
 ```js
 // postcss.config.js
 module.exports = {
-  plugins: [
-    require('postcss-remove-duplicate-values')
-  ]
-}
+  plugins: [require('postcss-remove-duplicate-values')],
+};
 ```
 
 ### 3. That's it! 🎉
+
 The plugin automatically removes duplicates from your CSS.
 
 ## 📖 Examples
 
 ### Basic Duplicate Removal
+
 ```css
 /* Before */
 .button {
@@ -63,6 +66,7 @@ The plugin automatically removes duplicates from your CSS.
 ```
 
 ### `!important` Handling
+
 ```css
 /* Before */
 .button {
@@ -80,6 +84,7 @@ The plugin automatically removes duplicates from your CSS.
 ```
 
 ### Vendor Prefixes
+
 ```css
 /* Before */
 .button {
@@ -109,62 +114,66 @@ Before applying the plugin, you can configure the following options:
 | [`preserveEmpty`](#preserveempty) | `boolean`                                           | `false`     |
 
 ### selector
+
 Filter which CSS selectors to process.
 
 ```js
 // Only process .button selectors
 removeDuplicateValues({
-  selector: '.button'
-})
+  selector: '.button',
+});
 
 // Process selectors matching regex
 removeDuplicateValues({
-  selector: /^\.btn-/
-})
+  selector: /^\.btn-/,
+});
 
 // Custom function
 removeDuplicateValues({
-  selector: (selector) => selector.includes('button')
-})
+  selector: selector => selector.includes('button'),
+});
 ```
 
 ### preserveEmpty
+
 Keep or remove empty CSS rules.
 
 ```js
 // Remove empty rules (default)
 removeDuplicateValues({
-  preserveEmpty: false
-})
+  preserveEmpty: false,
+});
 
 // Keep empty rules
 removeDuplicateValues({
-  preserveEmpty: true
-})
+  preserveEmpty: true,
+});
 ```
 
 ## 🔧 Advanced Usage
 
 ### With PostCSS API
+
 ```js
-const postcss = require('postcss')
-const removeDuplicateValues = require('postcss-remove-duplicate-values')
+const postcss = require('postcss');
+const removeDuplicateValues = require('postcss-remove-duplicate-values');
 
 const css = `
 .button {
   color: red;
   color: blue;
-}`
+}`;
 
 postcss([removeDuplicateValues()])
   .process(css)
   .then(result => {
-    console.log(result.css)
+    console.log(result.css);
     // Output: .button { color: blue; }
-  })
+  });
 ```
 
 ### With Build Tools
+
 ```js
 // webpack.config.js
 module.exports = {
@@ -178,22 +187,20 @@ module.exports = {
           {
             loader: 'postcss-loader',
             options: {
-              plugins: [
-                require('postcss-remove-duplicate-values')
-              ]
-            }
-          }
-        ]
-      }
-    ]
-  }
-}
+              plugins: [require('postcss-remove-duplicate-values')],
+            },
+          },
+        ],
+      },
+    ],
+  },
+};
 ```
-
 
 ## 📚 More Examples
 
 ### Selector Filtering
+
 ```css
 /* Input CSS */
 .container {
@@ -216,6 +223,7 @@ module.exports = {
 ```
 
 ### Empty Rule Handling
+
 ```css
 /* Input CSS */
 .empty-rule {
@@ -245,6 +253,7 @@ module.exports = {
 [🎮 **Try the Playground** →](https://xettri.github.io/postcss-remove-duplicate-values)
 
 ### What You Can Do in the Playground:
+
 - ✨ **Test CSS processing** in real-time
 - 🎯 **Experiment with options** (selector filtering, empty rule preservation)
 - 📚 **Try pre-built examples** for common scenarios
