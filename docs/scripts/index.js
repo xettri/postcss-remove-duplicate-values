@@ -124,7 +124,7 @@ const EXAMPLES = {
  * Load a CSS example into the input editor
  * @param {string} type - Example type key
  */
-function loadExample(type) {
+function loadExample(type, initLoad = false) {
   const example = EXAMPLES[type];
   if (!example) {
     showSnackbar(`Example "${type}" not found`, 'error');
@@ -142,7 +142,9 @@ function loadExample(type) {
   // Clear previous output and reset stats
   clearOutput();
   resetStats();
-
+  // no need to show loaded example in case of
+  // first time load with page load
+  if(initLoad) return;
   showSnackbar(`Loaded: ${example.name}`, 'success');
 }
 
@@ -575,7 +577,7 @@ function initialize() {
 
   // Load initial example with delay to ensure DOM is ready
   setTimeout(() => {
-    loadExample('basic');
+    loadExample('basic', true);
   }, 100);
 }
 
