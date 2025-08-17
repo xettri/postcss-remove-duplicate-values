@@ -169,7 +169,7 @@ async function processCSS() {
       preserveEmpty: DOM.preserveEmptyToggle?.checked || false,
     };
 
-    const result = await simulatePostCSS(inputText, options);
+    const result = await window.runPostCSS(inputText, options);
     updateOutput(result);
     updateStats(result);
 
@@ -178,84 +178,6 @@ async function processCSS() {
     console.error('Processing error:', error);
     showSnackbar(`Error processing CSS: ${error.message}`, 'error');
   }
-}
-
-/**
- * Simulate PostCSS processing with optimized parsing
- * @param {string} css - Input CSS
- * @param {Object} options - Processing options
- * @returns {Object} Processing results
- */
-async function simulatePostCSS(css, options = {}) {
-  const { selector, preserveEmpty = false } = options;
-
-  const rules = [];
-  let duplicates = 0;
-  let emptyRulesRemoved = 0;
-  let rulesSkipped = 0;
-
-  // Use cached regex for better performance
-  const ruleRegex = CONFIG.SELECTOR_REGEX;
-  let match;
-
-  while ((match = ruleRegex.exec(css)) !== null) {
-    const selectorText = match[1].trim();
-    const declarations = match[2].trim();
-
-    // Handle selector filtering
-    if (selector && !matchSelector(selectorText, selector)) {
-      rules.push({
-        selector: selectorText,
-        content: declarations,
-        isEmpty: !declarations.trim(),
-        skipped: true,
-      });
-      rulesSkipped++;
-      continue;
-    }
-
-    // Process declarations
-    if (declarations) {
-      const processedDeclarations = processDeclarations(declarations);
-      const originalCount = countDeclarations(declarations);
-      const processedCount = countDeclarations(processedDeclarations);
-      duplicates += originalCount - processedCount;
-
-      rules.push({
-        selector: selectorText,
-        content: processedDeclarations,
-        isEmpty: !processedDeclarations.trim(),
-        skipped: false,
-      });
-    } else {
-      // Handle empty rules
-      if (!preserveEmpty) {
-        emptyRulesRemoved++;
-        continue;
-      }
-
-      rules.push({
-        selector: selectorText,
-        content: '',
-        isEmpty: true,
-        skipped: false,
-      });
-    }
-  }
-
-  // Build result CSS efficiently
-  const resultCSS = rules
-    .filter(rule => !rule.skipped || rule.content.trim())
-    .map(rule => `${rule.selector} {\n  ${rule.content}\n}`)
-    .join('\n\n');
-
-  return {
-    css: resultCSS,
-    rules: rules.length,
-    duplicates,
-    emptyRulesRemoved,
-    rulesSkipped,
-  };
 }
 
 /**

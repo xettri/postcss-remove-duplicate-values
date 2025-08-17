@@ -84,50 +84,57 @@
     />
     <link rel="stylesheet" href="styles/index.css" />
     <link rel="stylesheet" href="styles/editor.css" />
-    
+
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "PostCSS Remove Duplicate Values",
-      "description": "Interactive playground to test PostCSS plugin for removing duplicate CSS properties and optimizing stylesheets",
-      "url": "https://xettri.github.io/postcss-remove-duplicate-values",
-      "applicationCategory": "DeveloperApplication",
-      "operatingSystem": "Web Browser",
-      "softwareVersion": "2.0.0",
-      "downloadUrl": "https://www.npmjs.com/package/postcss-remove-duplicate-values",
-      "author": {
-        "@type": "Person",
-        "name": "Bharat Rawat",
-        "url": "https://bharatrawat.com",
-        "jobTitle": "Software Engineer",
-        "knowsAbout": ["PostCSS", "CSS Optimization", "Web Performance", "Build Tools", "Developer Tools"],
-        "sameAs": [
-          "https://github.com/xettri",
-          "https://www.npmjs.com/~xettri"
-        ]
-      },
-      "creator": {
-        "@type": "Person",
-        "name": "Bharat Rawat",
-        "url": "https://bharatrawat.com"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "Bharat Rawat",
-        "url": "https://bharatrawat.com"
-      },
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD",
-        "availability": "https://schema.org/InStock"
-      },
-      "keywords": "PostCSS, CSS optimization, duplicate removal, web performance, build tools, developer tools",
-      "inLanguage": "en",
-      "isAccessibleForFree": true
-    }
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "PostCSS Remove Duplicate Values",
+        "description": "Interactive playground to test PostCSS plugin for removing duplicate CSS properties and optimizing stylesheets",
+        "url": "https://xettri.github.io/postcss-remove-duplicate-values",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Web Browser",
+        "softwareVersion": "2.0.0",
+        "downloadUrl": "https://www.npmjs.com/package/postcss-remove-duplicate-values",
+        "author": {
+          "@type": "Person",
+          "name": "Bharat Rawat",
+          "url": "https://bharatrawat.com",
+          "jobTitle": "Senior Software Engineer",
+          "knowsAbout": [
+            "PostCSS",
+            "CSS Optimization",
+            "Web Performance",
+            "Build Tools",
+            "Developer Tools"
+          ],
+          "sameAs": [
+            "https://github.com/xettri",
+            "https://www.npmjs.com/~xettri"
+          ]
+        },
+        "creator": {
+          "@type": "Person",
+          "name": "Bharat Rawat",
+          "url": "https://bharatrawat.com"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Bharat Rawat",
+          "url": "https://bharatrawat.com"
+        },
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD",
+          "availability": "https://schema.org/InStock"
+        },
+        "keywords": "PostCSS, CSS optimization, duplicate removal, web performance, build tools, developer tools",
+        "inLanguage": "en",
+        "isAccessibleForFree": true
+      }
     </script>
+    <script src="scripts/init.js" type="module" async></script>
   </head>
   <body class="bg-dark-900 min-h-screen text-gray-100">
     <!-- Header -->
@@ -287,22 +294,7 @@
             id="inputCSS"
             class="w-full h-96 p-6 code-editor bg-dark-900 text-green-400 resize-none scrollbar-thin"
             placeholder="Enter your CSS here..."
-          >
-/* Test your CSS here */
-.button {
-  color: red;
-  color: blue;
-  margin: 10px;
-  margin: 20px;
-}
-
-.card {
-  display: block;
-  display: flex;
-  background: white;
-  background: #fff;
-}</textarea
-          >
+          ></textarea>
         </div>
 
         <div
@@ -506,9 +498,29 @@
     </div>
 
     <footer class="sr-only" aria-hidden="true">
-      <p>PostCSS Remove Duplicate Values plugin developed by <a href="https://bharatrawat.com" rel="author" title="Bharat Rawat - Software Engineer">Bharat Rawat</a></p>
-      <p>Visit <a href="https://bharatrawat.com" rel="me" title="Bharat Rawat's Portfolio">bharatrawat.com</a> for more open source contributions and development work</p>
-      <p>Software engineer specializing in web performance, build tools, and developer experience</p>
+      <p>
+        PostCSS Remove Duplicate Values plugin developed by
+        <a
+          href="https://bharatrawat.com"
+          rel="author"
+          title="Bharat Rawat - Senior Software Engineer"
+          >Bharat Rawat</a
+        >
+      </p>
+      <p>
+        Visit
+        <a
+          href="https://bharatrawat.com"
+          rel="me"
+          title="Bharat Rawat's Portfolio"
+          >bharatrawat.com</a
+        >
+        for more open source contributions and development work
+      </p>
+      <p>
+        Software engineer specializing in web performance, build tools, and
+        developer experience
+      </p>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/node-snackbar@0.1.16/dist/snackbar.min.js"></script>
     <script src="scripts/index.js"></script>
