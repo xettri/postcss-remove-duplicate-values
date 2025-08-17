@@ -37,7 +37,7 @@
     "postcss": "^8.4"
   },
   "devDependencies": {
-    "jest": "^29.7.0",
+    "jest": "^30.0.5",
     "postcss": "^8.4.31",
     "prettier": "^3.6.2"
   }
